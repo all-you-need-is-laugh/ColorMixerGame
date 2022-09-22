@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
         if (_instance != null) {
-            Debug.LogError($"Attempt to instantiate more than one {GetType().Name} component", this);
-            Debug.LogError($"Existing instance of {GetType().Name} component", _instance);
+            Debug.LogError($"Attempt to instantiate more than one {GetType().Name} component!", this);
+            Debug.LogError($"Click on this message to find existing instance of {GetType().Name} component", _instance);
             return;
         }
         else {
@@ -48,23 +48,23 @@ public class GameManager : MonoBehaviour {
         }
 
         if (_levels.Length == 0) {
-            Debug.LogError($"Add at least 1 level to {GetType().Name} component", this);
+            Debug.LogError($"Add at least 1 level to {GetType().Name} component!", this);
             return;
         }
 
         if (_orderColorImage == null) {
-            Debug.LogError($"Attach order UI Image object to {GetType().Name} component", this);
+            Debug.LogError($"Attach order UI Image object to {GetType().Name} component!", this);
             return;
         }
 
         if (_ingredientsHolder == null) {
-            Debug.LogError($"Attach ingredients holder to {GetType().Name} component", this);
+            Debug.LogError($"Attach ingredients holder to {GetType().Name} component!", this);
             return;
         }
 
         if (_camera == null) {
             if (Camera.main == null) {
-                Debug.LogError($"Attach camera to {GetType().Name} component or add main camera to the scene", this);
+                Debug.LogError($"Attach camera to {GetType().Name} component or add main camera to the scene!", this);
                 return;
             }
             _camera = Camera.main;
