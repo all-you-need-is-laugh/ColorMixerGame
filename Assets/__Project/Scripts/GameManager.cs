@@ -110,16 +110,32 @@ public class GameManager : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    private void InstantiateIngredient(GameObject ingredient, Vector3 position, Transform parent) {
-        var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
-        Instantiate(ingredient, position, rotation, parent);
-    }
-
-    private void InstantiateIngredients(GameObject[] ingredients) {
+    private void CleanIngredientsHolder() {
         foreach (Transform child in _ingredientsHolder) {
+            IngredientController ingredientController = child.GetComponent<IngredientController>();
+            if (ingredientController != null) {
+                if (ingredientController.ingredientManager != null) {
+                    ingredientController.ingredientManager.Release(ingredientController);
+                    continue;
+                }
+
+                Debug.LogError($"Found object inside ingredients holder without {nameof(IngredientManager)} specified in {nameof(IngredientController)} component: {child.name}. It will be destroyed directly!", this);
+            }
+            else {
+                Debug.LogError($"Found object inside ingredients holder without {nameof(IngredientController)} component: {child.name}. It will be destroyed directly!", this);
+            }
+
             Destroy(child.gameObject);
         }
+    }
 
+    private void InstantiateIngredient(IngredientManager ingredientManager, Vector3 position, Transform parent) {
+        var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
+        // Instantiate(ingredient, position, rotation, parent);
+        ingredientManager.Acquire(position, rotation, parent);
+    }
+
+    private void InstantiateIngredients(IngredientManager[] ingredients) {
         if (ingredients.Length <= 1) {
             InstantiateIngredient(ingredients[0], _ingredientsHolder.position, _ingredientsHolder);
             return;
@@ -129,7 +145,7 @@ public class GameManager : MonoBehaviour {
         Vector3 rightPosition = _ingredientsHolder.position + _ingredientsHolder.right * _ingredientsPlacementWidth / 2;
         Vector3 positionPadding = (rightPosition - leftPosition) / ingredients.Length;
         Vector3 position = leftPosition + positionPadding / 2;
-        foreach (GameObject ingredient in ingredients) {
+        foreach (IngredientManager ingredient in ingredients) {
             InstantiateIngredient(ingredient, position, _ingredientsHolder);
             position += positionPadding;
         }
@@ -147,6 +163,7 @@ public class GameManager : MonoBehaviour {
 
         SetOrderColor(level.targetColor);
 
+        CleanIngredientsHolder();
         InstantiateIngredients(level.ingredients);
     }
 
@@ -159,20 +176,27 @@ public class GameManager : MonoBehaviour {
         StartLevel(_levels[_currentLevelIndex]);
     }
 
+    #endregion Main functionality -------------------------------------------------
+
+    #region Debug functionality -------------------------------------------------
+
     struct PointWithColor {
         public Vector3 point;
         public Color color;
     }
+
     private List<PointWithColor> debugPoints = new List<PointWithColor>();
+
     private void DebugPoint(Vector3 point, Color color) {
         debugPoints.Add(new PointWithColor { point = point, color = color });
     }
-    void OnDrawGizmos() {
+
+    private void OnDrawGizmos() {
         foreach (PointWithColor pair in debugPoints) {
             Gizmos.color = pair.color;
             Gizmos.DrawSphere(pair.point, 0.01f);
         }
     }
 
-    #endregion Main functionality -------------------------------------------------
+    #endregion Debug functionality -------------------------------------------------
 }

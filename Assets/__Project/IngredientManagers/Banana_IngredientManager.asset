@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfc938b21a4276f488d1a00d999dfd68, type: 3}
-  m_Name: Level0
+  m_Script: {fileID: 11500000, guid: baac217d8cf43954796ea1f61a02adc2, type: 3}
+  m_Name: Banana_IngredientManager
   m_EditorClassIdentifier: 
-  targetColor: {r: 0, g: 0.17238235, b: 1, a: 1}
-  ingredients:
-  - {fileID: 11400000, guid: 064f97c1ecb54974b8c077f09b4f8c57, type: 2}
+  ingredientColor: {r: 0.6313726, g: 0.5529412, b: 0.34117648, a: 1}
+  ingredientPrefab: {fileID: 8374663798827413360, guid: 897bcf8593e8a214db9a4a9aa50c0958,
+    type: 3}

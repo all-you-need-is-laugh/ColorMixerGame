@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetColor: {r: 0.9990419, g: 0.34509802, b: 1, a: 1}
   ingredients:
-  - {fileID: 778466012515400813, guid: c0214bc9842b55e4094189c554e10f33, type: 3}
-  - {fileID: 8374663798827413360, guid: 897bcf8593e8a214db9a4a9aa50c0958, type: 3}
-  - {fileID: 778466012515400813, guid: c0214bc9842b55e4094189c554e10f33, type: 3}
-  - {fileID: 8374663798827413360, guid: 897bcf8593e8a214db9a4a9aa50c0958, type: 3}
+  - {fileID: 11400000, guid: 042577e076a26304b9302bb111497f81, type: 2}
+  - {fileID: 11400000, guid: 042577e076a26304b9302bb111497f81, type: 2}
+  - {fileID: 11400000, guid: 064f97c1ecb54974b8c077f09b4f8c57, type: 2}
+  - {fileID: 11400000, guid: 042577e076a26304b9302bb111497f81, type: 2}
