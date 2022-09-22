@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private float _ingredientsPlacementWidth = .5f;
 
+    [Tooltip("Main camera will be picked by default")]
+    [SerializeField]
+    private Camera _camera;
+
     #endregion Editable settings -------------------------------------------------
 
     #region Fields, properties, constants -------------------------------------------------
@@ -47,13 +51,23 @@ public class GameManager : MonoBehaviour {
             Debug.LogError($"Add at least 1 level to {GetType().Name} component", this);
             return;
         }
+
         if (_orderColorImage == null) {
             Debug.LogError($"Attach order UI Image object to {GetType().Name} component", this);
             return;
         }
+
         if (_ingredientsHolder == null) {
             Debug.LogError($"Attach ingredients holder to {GetType().Name} component", this);
             return;
+        }
+
+        if (_camera == null) {
+            if (Camera.main == null) {
+                Debug.LogError($"Attach camera to {GetType().Name} component or add main camera to the scene", this);
+                return;
+            }
+            _camera = Camera.main;
         }
 
         // RestartLevel();
@@ -63,7 +77,16 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update() {
-        // Debug functionality
+        HandleTouch();
+
+        HandleDebugActions();
+    }
+
+    #endregion MonoBehaviour Hooks -------------------------------------------------
+
+    #region Interactions handling -------------------------------------------------
+
+    private void HandleDebugActions() {
         if (Input.GetKeyDown(KeyCode.R)) {
             RestartLevel();
         }
@@ -72,13 +95,22 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    #endregion MonoBehaviour Hooks -------------------------------------------------
+    private void HandleTouch() {
+        if (Input.GetMouseButtonDown(0)) {
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 10)) {
+                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
+                interactable?.Interact();
+            }
+        }
+    }
+
+    #endregion Interactions handling -------------------------------------------------
 
     #region Main functionality -------------------------------------------------
 
     private void InstantiateIngredient(GameObject ingredient, Vector3 position, Transform parent) {
-        DebugPoint(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K, Color.red);
-        // var rotation = Quaternion.identity;
         var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
         Instantiate(ingredient, position, rotation, parent);
     }

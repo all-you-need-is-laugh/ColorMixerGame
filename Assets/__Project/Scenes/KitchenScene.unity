@@ -1751,6 +1751,7 @@ MonoBehaviour:
   _orderColorImage: {fileID: 1323174204}
   _ingredientsHolder: {fileID: 1193693646}
   _ingredientsPlacementWidth: 0.7
+  _camera: {fileID: 0}
 --- !u!4 &2009397050
 Transform:
   m_ObjectHideFlags: 0
