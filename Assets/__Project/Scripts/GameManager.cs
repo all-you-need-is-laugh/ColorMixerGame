@@ -9,6 +9,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
+    [Tooltip("Main camera will be picked by default")]
+    [SerializeField]
+    private Camera _camera;
+
     [SerializeField]
     private LevelSettings[] _levels;
 
@@ -21,9 +25,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private float _ingredientsPlacementWidth = .5f;
 
-    [Tooltip("Main camera will be picked by default")]
     [SerializeField]
-    private Camera _camera;
+    private Transform _blender;
 
     #endregion Editable settings -------------------------------------------------
 
@@ -59,6 +62,11 @@ public class GameManager : MonoBehaviour {
 
         if (_ingredientsHolder == null) {
             Debug.LogError($"Attach ingredients holder to {GetType().Name} component!", this);
+            return;
+        }
+
+        if (_blender == null) {
+            Debug.LogError($"Attach blender object to {GetType().Name} component!", this);
             return;
         }
 
@@ -132,7 +140,8 @@ public class GameManager : MonoBehaviour {
     private void InstantiateIngredient(IngredientManager ingredientManager, Vector3 position, Transform parent) {
         var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
         // Instantiate(ingredient, position, rotation, parent);
-        ingredientManager.Acquire(position, rotation, parent);
+        IngredientController ingredientController = ingredientManager.Acquire(position, rotation, parent);
+        ingredientController.blender = _blender;
     }
 
     private void InstantiateIngredients(IngredientManager[] ingredients) {

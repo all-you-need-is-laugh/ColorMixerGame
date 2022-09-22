@@ -1714,6 +1714,12 @@ RectTransform:
   m_AnchoredPosition: {x: -0.296, y: 1.992}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &1984987624 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4657599669840886, guid: 3a04d7ac33eeb7c43bf09f56e3dbcf95,
+    type: 3}
+  m_PrefabInstance: {fileID: 620911701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2009397048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,6 +1749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3fbcf2869403e4fb886098cff809cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
   _levels:
   - {fileID: 11400000, guid: 275d86a6d06b908448c6eb03dcccef01, type: 2}
   - {fileID: 11400000, guid: 7bb9105b4626f2a4eb5280055edf17c4, type: 2}
@@ -1751,7 +1758,7 @@ MonoBehaviour:
   _orderColorImage: {fileID: 1323174204}
   _ingredientsHolder: {fileID: 1193693646}
   _ingredientsPlacementWidth: 0.7
-  _camera: {fileID: 0}
+  _blender: {fileID: 1984987624}
 --- !u!4 &2009397050
 Transform:
   m_ObjectHideFlags: 0

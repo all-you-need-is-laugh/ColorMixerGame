@@ -26,9 +26,13 @@ public class IngredientManager : ScriptableObject {
     #endregion ScriptableObject Hooks -------------------------------------------------
 
     #region Main functionality -------------------------------------------------
-    public void Acquire(Vector3 position, Quaternion rotation, Transform parent) {
+    public IngredientController Acquire(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject instance = Instantiate(ingredientPrefab, position, rotation, parent);
-        instance.GetComponent<IngredientController>().ingredientManager = this;
+
+        var ingredientController = instance.GetComponent<IngredientController>();
+        ingredientController.ingredientManager = this;
+
+        return ingredientController;
     }
 
     public void Release(IngredientController ingredient) {
