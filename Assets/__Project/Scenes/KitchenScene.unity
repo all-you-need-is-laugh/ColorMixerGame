@@ -1229,7 +1229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1193693646}
   m_Layer: 0
-  m_Name: Ingredients
+  m_Name: Ingredients Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1348,7 +1348,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1386369119}
   m_Layer: 0
-  m_Name: KitchenProps
+  m_Name: Kitchen Props
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1394,7 +1394,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1652544263031632, guid: 3a07a1305adf7464bbd22995e1a94b51, type: 3}
       propertyPath: m_Name
-      value: ClientCharacter
+      value: Client Character
       objectReference: {fileID: 0}
     - target: {fileID: 4688765892190766, guid: 3a07a1305adf7464bbd22995e1a94b51, type: 3}
       propertyPath: m_RootOrder
@@ -1626,7 +1626,7 @@ GameObject:
   - component: {fileID: 1981118744}
   - component: {fileID: 1981118743}
   m_Layer: 5
-  m_Name: OrderBaloonCanvas
+  m_Name: Order Baloon Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
