@@ -138,10 +138,10 @@ public class GameManager : MonoBehaviour {
     }
 
     private void InstantiateIngredient(IngredientManager ingredientManager, Vector3 position, Transform parent) {
+        ingredientManager.blender = _blender;
+
         var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
-        // Instantiate(ingredient, position, rotation, parent);
-        IngredientController ingredientController = ingredientManager.Acquire(position, rotation, parent);
-        ingredientController.blender = _blender;
+        ingredientManager.Acquire(position, rotation, parent);
     }
 
     private void InstantiateIngredients(IngredientManager[] ingredients) {

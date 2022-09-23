@@ -1447,6 +1447,12 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: a8555c0cff30527479e32562cef9141f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a07a1305adf7464bbd22995e1a94b51, type: 3}
+--- !u!4 &1584780525 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4049869646888366, guid: 3a04d7ac33eeb7c43bf09f56e3dbcf95,
+    type: 3}
+  m_PrefabInstance: {fileID: 620911701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1601783063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1714,12 +1720,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.296, y: 1.992}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!4 &1984987624 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4657599669840886, guid: 3a04d7ac33eeb7c43bf09f56e3dbcf95,
-    type: 3}
-  m_PrefabInstance: {fileID: 620911701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2009397048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,7 +1758,7 @@ MonoBehaviour:
   _orderColorImage: {fileID: 1323174204}
   _ingredientsHolder: {fileID: 1193693646}
   _ingredientsPlacementWidth: 0.7
-  _blender: {fileID: 1984987624}
+  _blender: {fileID: 1584780525}
 --- !u!4 &2009397050
 Transform:
   m_ObjectHideFlags: 0

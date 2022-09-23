@@ -8,7 +8,7 @@ public class IngredientController : MonoBehaviour, IInteractable {
     #region Editable settings -------------------------------------------------
 
     [SerializeField]
-    private Color _color;
+    private float _movementExtraHeight = 0.2f;
 
     #endregion Editable settings -------------------------------------------------
 
@@ -27,6 +27,8 @@ public class IngredientController : MonoBehaviour, IInteractable {
     }
 
     private Rigidbody _rigidbody;
+
+    [HideInInspector]
     public Transform blender;
 
     #endregion Fields, properties, constants -------------------------------------------------
@@ -44,7 +46,8 @@ public class IngredientController : MonoBehaviour, IInteractable {
     public void Interact() {
         Debug.Log($"### > IngredientController > Interact with {name}!");
 
-        // ingredientManager.RenewAt(transform.position);
+        // Just ignore async nature of the call
+        _ = ingredientManager.RenewAt(transform.position, transform.rotation, transform.parent);
 
         MoveToBlender();
     }
@@ -54,7 +57,7 @@ public class IngredientController : MonoBehaviour, IInteractable {
     #region Main functionality -------------------------------------------------
 
     void MoveToBlender() {
-        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, blender.position, 0.3f);
+        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, blender.position, _movementExtraHeight);
     }
 
     #endregion Main functionality -------------------------------------------------
