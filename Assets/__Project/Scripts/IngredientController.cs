@@ -31,6 +31,8 @@ public class IngredientController : MonoBehaviour, IInteractable {
     [HideInInspector]
     public Transform blender;
 
+    private bool _renovationStarted = false;
+
     #endregion Fields, properties, constants -------------------------------------------------
 
     #region MonoBehaviour Hooks -------------------------------------------------
@@ -46,8 +48,12 @@ public class IngredientController : MonoBehaviour, IInteractable {
     public void Interact() {
         Debug.Log($"### > IngredientController > Interact with {name}!");
 
-        // Just ignore async nature of the call
-        _ = ingredientManager.RenewAt(transform.position, transform.rotation, transform.parent);
+        // For now ingredient still can be interacted, but copy of it must be created only after the first interaction
+        if (!_renovationStarted) {
+            // Just ignore async nature of the call
+            _ = ingredientManager.RenewAt(transform.position, transform.rotation, transform.parent);
+            _renovationStarted = true;
+        }
 
         MoveToBlender();
     }
