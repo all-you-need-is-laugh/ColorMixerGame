@@ -22,7 +22,7 @@ public class IngredientManager : ScriptableObject {
 
     private void OnValidate() {
         if (!ingredientPrefab.TryGetComponent<IngredientController>(out IngredientController _)) {
-            Debug.LogError($"{nameof(ingredientPrefab)} must have attached {nameof(IngredientController)} component", this);
+            Debug.LogError($"Specified to {GetType().Name} component {nameof(ingredientPrefab)} object must have attached {nameof(IngredientController)} component", this);
         }
     }
 

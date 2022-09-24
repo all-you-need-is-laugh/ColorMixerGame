@@ -37,8 +37,8 @@ public class BlenderController : MonoBehaviour {
     }
 
     private void OnValidate() {
-        Debug.Assert(_lid != null, $"Attach lid object to {GetType().Name} component!", this);
-        Debug.Assert(_animationEndPoint != null, $"Attach animation end point object to {GetType().Name} component!", this);
+        Debug.Assert(_lid != null, $"Specify lid object to {GetType().Name} component!", this);
+        Debug.Assert(_animationEndPoint != null, $"Specify animation end point object to {GetType().Name} component!", this);
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------

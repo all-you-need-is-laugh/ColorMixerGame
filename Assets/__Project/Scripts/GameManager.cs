@@ -56,23 +56,23 @@ public class GameManager : MonoBehaviour {
         }
 
         if (_orderColorImage == null) {
-            Debug.LogError($"Attach order UI Image object to {GetType().Name} component!", this);
+            Debug.LogError($"Specify order UI Image object to {GetType().Name} component!", this);
             return;
         }
 
         if (_ingredientsHolder == null) {
-            Debug.LogError($"Attach ingredients holder to {GetType().Name} component!", this);
+            Debug.LogError($"Specify ingredients holder to {GetType().Name} component!", this);
             return;
         }
 
         if (_blender == null) {
-            Debug.LogError($"Attach blender object to {GetType().Name} component!", this);
+            Debug.LogError($"Specify blender object to {GetType().Name} component!", this);
             return;
         }
 
         if (_camera == null) {
             if (Camera.main == null) {
-                Debug.LogError($"Attach camera to {GetType().Name} component or add main camera to the scene!", this);
+                Debug.LogError($"Specify camera to {GetType().Name} component or add main camera to the scene!", this);
                 return;
             }
             _camera = Camera.main;
