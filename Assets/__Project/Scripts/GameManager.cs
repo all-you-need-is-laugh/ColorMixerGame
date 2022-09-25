@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour {
     private const float INGREDIENTS_ROTATION_PERSPECTIVE_K = 1f;
     private static GameManager _instance;
     private int _currentLevelIndex = 0;
+    private BlenderController _blenderController;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -69,6 +71,13 @@ public class GameManager : MonoBehaviour {
             Debug.LogError($"Specify blender object to {GetType().Name} component!", this);
             return;
         }
+        else {
+            _blenderController = _blender.GetComponent<BlenderController>();
+            if (_blenderController == null) {
+                Debug.LogError($"Specified to {GetType().Name} component blender object must have attached {nameof(BlenderController)} component!", this);
+                return;
+            }
+        }
 
         if (_camera == null) {
             if (Camera.main == null) {
@@ -80,7 +89,7 @@ public class GameManager : MonoBehaviour {
 
         // RestartLevel();
         // Add delay before start to let everything warm up - without it ingredients have non-zero angular velocity when
-        // fall down
+        // fall down at first time
         Invoke(nameof(RestartLevel), .5f);
     }
 
@@ -108,10 +117,30 @@ public class GameManager : MonoBehaviour {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 10)) {
-                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
-                interactable?.Interact();
+                if (hitInfo.collider.tag == "Ingredient") {
+                    // Just ignore async nature of the call
+                    _ = InteractWithIngredient(hitInfo.collider.gameObject);
+                }
+                else if (hitInfo.collider.tag == "MixButton") {
+                    // Just ignore async nature of the call
+                    _ = InteractWithMixButton(hitInfo.collider.gameObject);
+                }
             }
         }
+    }
+
+    private async Task InteractWithIngredient(GameObject ingredient) {
+        IngredientController ingredientController = ingredient.GetComponent<IngredientController>();
+
+        if (ingredientController != null) {
+            await _blenderController.OpenLid();
+            ingredientController.Interact();
+        }
+    }
+
+    private async Task InteractWithMixButton(GameObject ingredient) {
+        await _blenderController.CloseLid();
+        Debug.Log("Mix!");
     }
 
     #endregion Interactions handling -------------------------------------------------

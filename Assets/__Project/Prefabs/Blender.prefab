@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lid: {fileID: 4380901099284090}
   _animationDuration: 1
+  _animationJumpPower: 0.5
   _animationEndPoint: {fileID: 5983788852063529355}
 --- !u!1 &1949344047188952
 GameObject:

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -58,12 +59,14 @@ public class BlenderController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    private void OpenLid() {
+    public Task OpenLid() {
         _lidAnimation.PlayForward();
+        return _lidAnimation.AsyncWaitForCompletion();
     }
 
-    private void CloseLid() {
+    public Task CloseLid() {
         _lidAnimation.PlayBackwards();
+        return _lidAnimation.AsyncWaitForCompletion();
     }
 
     #endregion Main functionality -------------------------------------------------

@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: -2602312289729072985}
   m_Layer: 0
   m_Name: Banana
-  m_TagString: Untagged
+  m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -252,7 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de98f2fa1856b6409c3c860388bc0d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _color: {r: 0.6313726, g: 0.5529412, b: 0.34117648, a: 1}
+  _movementExtraHeight: 0.2
+  blender: {fileID: 0}
 --- !u!1 &8473785797731183130
 GameObject:
   m_ObjectHideFlags: 0

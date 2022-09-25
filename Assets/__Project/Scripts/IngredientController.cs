@@ -4,7 +4,7 @@ using UnityEngine;
 // Responds for interactions with specific ingredient
 
 [RequireComponent(typeof(Rigidbody))]
-public class IngredientController : MonoBehaviour, IInteractable {
+public class IngredientController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
     [SerializeField]
@@ -43,7 +43,7 @@ public class IngredientController : MonoBehaviour, IInteractable {
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
 
-    #region IInteractable Hooks -------------------------------------------------
+    #region Main functionality -------------------------------------------------
 
     public void Interact() {
         Debug.Log($"### > IngredientController > Interact with {name}!");
@@ -58,11 +58,7 @@ public class IngredientController : MonoBehaviour, IInteractable {
         MoveToBlender();
     }
 
-    #endregion IInteractable Hooks -------------------------------------------------
-
-    #region Main functionality -------------------------------------------------
-
-    void MoveToBlender() {
+    private void MoveToBlender() {
         _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, blender.position, _movementExtraHeight);
     }
 
