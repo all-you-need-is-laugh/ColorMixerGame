@@ -17,6 +17,9 @@ public class BlenderController : MonoBehaviour {
     [SerializeField]
     private Transform _animationEndPoint;
 
+    [SerializeField]
+    public Transform ingredientMovementEndPoint;
+
     #endregion Editable settings -------------------------------------------------
 
     #region Fields, properties, constants -------------------------------------------------
@@ -40,6 +43,7 @@ public class BlenderController : MonoBehaviour {
     private void OnValidate() {
         Debug.Assert(_lid != null, $"Specify lid object to {GetType().Name} component!", this);
         Debug.Assert(_animationEndPoint != null, $"Specify animation end point object to {GetType().Name} component!", this);
+        Debug.Assert(ingredientMovementEndPoint != null, $"Specify ingredient movement end point object to {GetType().Name} component!", this);
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------

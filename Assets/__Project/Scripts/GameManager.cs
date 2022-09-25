@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
     private float _ingredientsPlacementWidth = .5f;
 
     [SerializeField]
-    private Transform _blender;
+    private BlenderController _blenderController;
 
     #endregion Editable settings -------------------------------------------------
 
@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour {
     private const float INGREDIENTS_ROTATION_PERSPECTIVE_K = 1f;
     private static GameManager _instance;
     private int _currentLevelIndex = 0;
-    private BlenderController _blenderController;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -67,16 +66,9 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
-        if (_blender == null) {
-            Debug.LogError($"Specify blender object to {GetType().Name} component!", this);
+        if (_blenderController == null) {
+            Debug.LogError($"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
             return;
-        }
-        else {
-            _blenderController = _blender.GetComponent<BlenderController>();
-            if (_blenderController == null) {
-                Debug.LogError($"Specified to {GetType().Name} component blender object must have attached {nameof(BlenderController)} component!", this);
-                return;
-            }
         }
 
         if (_camera == null) {
@@ -134,7 +126,9 @@ public class GameManager : MonoBehaviour {
 
         if (ingredientController != null) {
             await _blenderController.OpenLid();
-            ingredientController.Interact();
+
+            ingredientController.MoveTo(_blenderController.ingredientMovementEndPoint.position);
+            _ = ingredientController.ingredientManager.RenewAt(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
         }
     }
 
@@ -167,8 +161,6 @@ public class GameManager : MonoBehaviour {
     }
 
     private void InstantiateIngredient(IngredientManager ingredientManager, Vector3 position, Transform parent) {
-        ingredientManager.blender = _blender;
-
         var rotation = Quaternion.LookRotation(parent.position + parent.forward * INGREDIENTS_ROTATION_PERSPECTIVE_K - position, Vector3.up);
         ingredientManager.Acquire(position, rotation, parent);
     }

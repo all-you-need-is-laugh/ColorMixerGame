@@ -10,7 +10,6 @@ public class IngredientManager : ScriptableObject {
     public Color ingredientColor;
     public GameObject ingredientPrefab;
     public float renewDelay = 1;
-    public Transform blender;
 
     #endregion Editable settings -------------------------------------------------
 
@@ -41,7 +40,6 @@ public class IngredientManager : ScriptableObject {
 
         var ingredientController = instance.GetComponent<IngredientController>();
         ingredientController.ingredientManager = this;
-        ingredientController.blender = blender;
 
         return ingredientController;
     }

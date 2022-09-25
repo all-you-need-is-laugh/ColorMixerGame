@@ -28,11 +28,6 @@ public class IngredientController : MonoBehaviour {
 
     private Rigidbody _rigidbody;
 
-    [HideInInspector]
-    public Transform blender;
-
-    private bool _renovationStarted = false;
-
     #endregion Fields, properties, constants -------------------------------------------------
 
     #region MonoBehaviour Hooks -------------------------------------------------
@@ -45,21 +40,8 @@ public class IngredientController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    public void Interact() {
-        Debug.Log($"### > IngredientController > Interact with {name}!");
-
-        // For now ingredient still can be interacted, but copy of it must be created only after the first interaction
-        if (!_renovationStarted) {
-            // Just ignore async nature of the call
-            _ = ingredientManager.RenewAt(transform.position, transform.rotation, transform.parent);
-            _renovationStarted = true;
-        }
-
-        MoveToBlender();
-    }
-
-    private void MoveToBlender() {
-        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, blender.position, _movementExtraHeight);
+    public void MoveTo(Vector3 destination) {
+        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, destination, _movementExtraHeight);
     }
 
     #endregion Main functionality -------------------------------------------------
