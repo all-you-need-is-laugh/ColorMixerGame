@@ -111,29 +111,29 @@ public class GameManager : MonoBehaviour {
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 10)) {
                 if (hitInfo.collider.tag == "Ingredient") {
                     // Just ignore async nature of the call
-                    _ = InteractWithIngredient(hitInfo.collider.gameObject);
+                    _ = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                 }
                 else if (hitInfo.collider.tag == "MixButton") {
                     // Just ignore async nature of the call
-                    _ = InteractWithMixButton(hitInfo.collider.gameObject);
+                    _ = InteractWithMixButtonAsync(hitInfo.collider.gameObject);
                 }
             }
         }
     }
 
-    private async Task InteractWithIngredient(GameObject ingredient) {
+    private async Task InteractWithIngredientAsync(GameObject ingredient) {
         IngredientController ingredientController = ingredient.GetComponent<IngredientController>();
 
         if (ingredientController != null) {
             await _blenderController.OpenLid();
 
             ingredientController.MoveTo(_blenderController.ingredientMovementEndPoint.position);
-            _ = ingredientController.ingredientManager.RenewAt(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
+            _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
             ingredient.tag = "Ingredient_Non_Interactive";
         }
     }
 
-    private async Task InteractWithMixButton(GameObject ingredient) {
+    private async Task InteractWithMixButtonAsync(GameObject ingredient) {
         await _blenderController.CloseLid();
         Debug.Log("Mix!");
     }

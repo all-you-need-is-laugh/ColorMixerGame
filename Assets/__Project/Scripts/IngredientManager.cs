@@ -29,7 +29,7 @@ public class IngredientManager : ScriptableObject {
 
     #region Main functionality -------------------------------------------------
 
-    public async Task RenewAt(Vector3 position, Quaternion rotation, Transform parent) {
+    public async Task RenewAtAsync(Vector3 position, Quaternion rotation, Transform parent) {
         await Task.Delay(Mathf.FloorToInt(renewDelay * 1000));
 
         Acquire(position, rotation, parent);
