@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,9 @@ public class GameManager : MonoBehaviour {
     private float _ingredientsPlacementWidth = .5f;
 
     [SerializeField]
+    private float _waitBeforeCloseLid = 2;
+
+    [SerializeField]
     private BlenderController _blenderController;
 
     #endregion Editable settings -------------------------------------------------
@@ -36,10 +40,18 @@ public class GameManager : MonoBehaviour {
     private const float INGREDIENTS_ROTATION_PERSPECTIVE_K = 1f;
     private static GameManager _instance;
     private int _currentLevelIndex = 0;
+    private CancellationTokenSource _lidOpenedWaitCts;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
     #region MonoBehaviour Hooks -------------------------------------------------
+
+    private void OnDisable() {
+        if (_lidOpenedWaitCts != null) {
+            _lidOpenedWaitCts.Cancel();
+            _lidOpenedWaitCts = null;
+        }
+    }
 
     private void Start() {
         if (_instance != null) {
@@ -125,11 +137,20 @@ public class GameManager : MonoBehaviour {
         IngredientController ingredientController = ingredient.GetComponent<IngredientController>();
 
         if (ingredientController != null) {
+            if (_lidOpenedWaitCts != null) {
+                _lidOpenedWaitCts.Cancel();
+            }
+            _lidOpenedWaitCts = new CancellationTokenSource();
+
             await _blenderController.OpenLid();
 
-            ingredientController.MoveTo(_blenderController.ingredientMovementEndPoint.position);
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
+            await ingredientController.MoveToAsync(_blenderController.ingredientMovementEndPoint.position);
             ingredient.tag = "Ingredient_Non_Interactive";
+
+            await Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token);
+
+            await _blenderController.CloseLid();
         }
     }
 

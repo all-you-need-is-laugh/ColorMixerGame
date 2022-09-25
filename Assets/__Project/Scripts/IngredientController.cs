@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 // Responds for interactions with specific ingredient
@@ -40,7 +41,7 @@ public class IngredientController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    public void MoveTo(Vector3 destination) {
+    public async Task MoveToAsync(Vector3 destination) {
         _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, destination, _movementExtraHeight);
     }
 
