@@ -129,6 +129,7 @@ public class GameManager : MonoBehaviour {
 
             ingredientController.MoveTo(_blenderController.ingredientMovementEndPoint.position);
             _ = ingredientController.ingredientManager.RenewAt(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
+            ingredient.tag = "Ingredient_Non_Interactive";
         }
     }
 
