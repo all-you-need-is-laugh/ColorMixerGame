@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 // Responds for interactions with specific ingredient
@@ -9,7 +10,10 @@ public class IngredientController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
     [SerializeField]
-    private float _movementExtraHeight = 0.2f;
+    private float _animationJumpPower = 0.5f;
+
+    [SerializeField]
+    private float _animationDuration = 1;
 
     #endregion Editable settings -------------------------------------------------
 
@@ -41,8 +45,11 @@ public class IngredientController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    public async Task MoveToAsync(Vector3 destination) {
-        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, destination, _movementExtraHeight);
+    public Task MoveToAsync(Vector3 destination) {
+        return _rigidbody
+            .DOJump(destination, _animationJumpPower, 1, _animationDuration)
+            .AsyncWaitForCompletion();
+
     }
 
     #endregion Main functionality -------------------------------------------------

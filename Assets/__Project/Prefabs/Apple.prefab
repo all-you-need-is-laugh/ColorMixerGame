@@ -76,7 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de98f2fa1856b6409c3c860388bc0d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementExtraHeight: 0.2
+  _animationJumpPower: 0.5
+  _animationDuration: 1
 --- !u!1001 &4201655515557254267
 PrefabInstance:
   m_ObjectHideFlags: 0
