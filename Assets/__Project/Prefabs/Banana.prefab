@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3097895312283171168}
   - component: {fileID: 9041322433878372861}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Collider (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2780827424703433528}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 950365728841807117}
   - component: {fileID: 5800794154285703588}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Collider (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4772998306051025056}
   - component: {fileID: 7725917298476011087}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Collider (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 3721438880393914217}
   - component: {fileID: 7783977522182717054}
   - component: {fileID: -2602312289729072985}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Banana
   m_TagString: Ingredient
   m_Icon: {fileID: 0}
@@ -253,7 +253,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementExtraHeight: 0.2
-  blender: {fileID: 0}
 --- !u!1 &8473785797731183130
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7865792511029868748}
   - component: {fileID: 7974811702451124082}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2660082916522675037}
   - component: {fileID: 8974637325512873771}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Collider (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -412,6 +411,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BananaGraphics
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d812605399bc5954c9b9115bd16ec8bb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d812605399bc5954c9b9115bd16ec8bb, type: 3}

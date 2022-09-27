@@ -1686,7 +1686,11 @@ MonoBehaviour:
   _orderColorImage: {fileID: 1323174204}
   _ingredientsHolder: {fileID: 1193693646}
   _ingredientsPlacementWidth: 0.7
+  _waitBeforeCloseLid: 2
   _blenderController: {fileID: 4557574382609680217}
+  _interactionsLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!4 &2009397050
 Transform:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5181534883110202477}
   - component: {fileID: 7388214837990657373}
   - component: {fileID: -6922743678214193457}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Apple
   m_TagString: Ingredient
   m_Icon: {fileID: 0}
@@ -77,7 +77,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementExtraHeight: 0.2
-  blender: {fileID: 0}
 --- !u!1001 &4201655515557254267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -144,6 +143,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AppleGraphics
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 68ffc647f7438d441b0a3662405a26de,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68ffc647f7438d441b0a3662405a26de, type: 3}

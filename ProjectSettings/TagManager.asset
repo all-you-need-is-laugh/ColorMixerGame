@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Ingredient
   - Ingredient_Non_Interactive
+  - MixButton
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Interactable
   - Water
   - UI
   - 

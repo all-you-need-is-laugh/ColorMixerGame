@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private BlenderController _blenderController;
 
+    [SerializeField]
+    private LayerMask _interactionsLayerMask;
+
     #endregion Editable settings -------------------------------------------------
 
     #region Fields, properties, constants -------------------------------------------------
@@ -120,7 +123,7 @@ public class GameManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 10)) {
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
                     hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     // Just ignore async nature of the call
