@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour {
     private static GameManager _instance;
     private int _currentLevelIndex = 0;
     private CancellationTokenSource _lidOpenedWaitCts;
+    private Task _ingredientMovementTask;
+    private bool _mixRequested = false;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -94,6 +96,8 @@ public class GameManager : MonoBehaviour {
             _camera = Camera.main;
         }
 
+        _ingredientMovementTask = Task.FromResult<object>(null);
+
         // RestartLevel();
         // Add delay before start to let everything warm up - without it ingredients have non-zero angular velocity when
         // fall down at first time
@@ -123,15 +127,16 @@ public class GameManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
+            if (!_mixRequested && Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
                     hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     // Just ignore async nature of the call
-                    _ = InteractWithIngredientAsync(hitInfo.collider.gameObject);
+                    _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                 }
                 else if (hitInfo.collider.CompareTag("MixButton")) {
+                    _mixRequested = true;
                     // Just ignore async nature of the call
-                    _ = InteractWithMixButtonAsync(hitInfo.collider.gameObject);
+                    _ingredientMovementTask.ContinueWith<Task>((_) => InteractWithMixButtonAsync());
                 }
             }
         }
@@ -157,9 +162,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private async Task InteractWithMixButtonAsync(GameObject ingredient) {
-        await _blenderController.CloseLid();
-        Debug.Log("Mix!");
+    private async Task InteractWithMixButtonAsync() {
+        await _blenderController.Mix();
     }
 
     #endregion Interactions handling -------------------------------------------------

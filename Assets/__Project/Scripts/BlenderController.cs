@@ -24,16 +24,17 @@ public class BlenderController : MonoBehaviour {
 
     #region Fields, properties, constants -------------------------------------------------
 
-    private Tween _lidAnimation;
+    private Vector3 _lidStartPosition;
+    private bool _isOpening = false;
+    private bool _isClosing = true;
+    private Task _emptyTask = Task.FromResult<object>(null);
 
     #endregion Fields, properties, constants -------------------------------------------------
 
     #region MonoBehaviour Hooks -------------------------------------------------
 
     private void Start() {
-        _lidAnimation = _lid.DOJump(_animationEndPoint.position, _animationJumpPower, 1, _animationDuration)
-            .SetAutoKill(false)
-            .Pause();
+        _lidStartPosition = _lid.position;
     }
 
     private void Update() {
@@ -64,13 +65,35 @@ public class BlenderController : MonoBehaviour {
     #region Main functionality -------------------------------------------------
 
     public Task OpenLid() {
-        _lidAnimation.PlayForward();
-        return _lidAnimation.AsyncWaitForCompletion();
+        if (_isOpening) {
+            return _emptyTask;
+        }
+
+        _isOpening = true;
+        _isClosing = false;
+
+        return _lid
+            .DOJump(_animationEndPoint.position, _animationJumpPower, 1, _animationDuration)
+            .AsyncWaitForCompletion();
     }
 
     public Task CloseLid() {
-        _lidAnimation.PlayBackwards();
-        return _lidAnimation.AsyncWaitForCompletion();
+        if (_isClosing) {
+            return _emptyTask;
+        }
+
+        _isOpening = false;
+        _isClosing = true;
+
+        return _lid
+            .DOJump(_lidStartPosition, _animationJumpPower, 1, _animationDuration)
+            .AsyncWaitForCompletion();
+    }
+
+    public async Task Mix() {
+        Debug.Log("Mix called!");
+        await CloseLid();
+        Debug.Log("Do mix!");
     }
 
     #endregion Main functionality -------------------------------------------------
