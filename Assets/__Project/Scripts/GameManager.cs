@@ -121,11 +121,12 @@ public class GameManager : MonoBehaviour {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 10)) {
-                if (hitInfo.collider.tag == "Ingredient") {
+                if (hitInfo.collider.CompareTag("Ingredient")) {
+                    hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     // Just ignore async nature of the call
                     _ = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                 }
-                else if (hitInfo.collider.tag == "MixButton") {
+                else if (hitInfo.collider.CompareTag("MixButton")) {
                     // Just ignore async nature of the call
                     _ = InteractWithMixButtonAsync(hitInfo.collider.gameObject);
                 }
@@ -146,7 +147,6 @@ public class GameManager : MonoBehaviour {
 
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
             await ingredientController.MoveToAsync(_blenderController.ingredientMovementEndPoint.position);
-            ingredient.tag = "Ingredient_Non_Interactive";
 
             await Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token);
 
