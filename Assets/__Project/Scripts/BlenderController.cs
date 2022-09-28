@@ -53,11 +53,11 @@ public class BlenderController : MonoBehaviour {
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
     private Material _jugContentMaterial;
-    private HashSet<IngredientController> _ingredientsSet = new HashSet<IngredientController>();
+    private HashSet<IngredientController> _ingredients = new HashSet<IngredientController>();
 
     public Vector3 jugEntryPointPosition { get => _jugEntryPoint.position; }
 
-    public int ingredientsNumber { get => _ingredientsSet.Count; }
+    public int ingredientsNumber { get => _ingredients.Count; }
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -87,13 +87,13 @@ public class BlenderController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider collider) {
         if (collider.TryGetComponent<IngredientController>(out IngredientController ingredientController)) {
-            _ingredientsSet.Add(ingredientController);
+            _ingredients.Add(ingredientController);
         }
     }
 
     private void OnTriggerExit(Collider collider) {
         if (collider.TryGetComponent<IngredientController>(out IngredientController ingredientController)) {
-            _ingredientsSet.Remove(ingredientController);
+            _ingredients.Remove(ingredientController);
         }
     }
 
@@ -149,12 +149,13 @@ public class BlenderController : MonoBehaviour {
 
         _lid.SetParent(_jug);
 
-        Color[] colorSteps = GenerateMixColorSteps();
+        Color[] colorSteps = GenerateMixColorSteps(_ingredients);
 
-        await DOTween.Sequence()
+        Sequence animation = DOTween.Sequence()
             .Join(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
-            .Join(AnimateColorMixing(_jugContentMaterial, colorSteps))
-            .AsyncWaitForCompletion();
+            .Join(AnimateColorMixing(_jugContentMaterial, colorSteps, _mixDuration));
+
+        await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredients(_ingredients, _mixDuration));
 
         Color finalColor = colorSteps[colorSteps.Length - 1];
 
@@ -174,15 +175,15 @@ public class BlenderController : MonoBehaviour {
         _jugContentMaterial.SetFloat("_Fill", 0);
     }
 
-    private Sequence AnimateColorMixing(Material material, Color[] colorSteps) {
+    private Sequence AnimateColorMixing(Material material, Color[] colorSteps, float duration) {
         material.SetColor("_Color", colorSteps[0]);
 
         int stepsNumber = colorSteps.Length;
         Sequence sequence = DOTween.Sequence()
-            .Join(material.DOFloat(1, "_Fill", _mixDuration));
+            .Join(material.DOFloat(1, "_Fill", duration));
 
         if (stepsNumber > 1) {
-            float stepDuration = _mixDuration / (stepsNumber - 1);
+            float stepDuration = duration / (stepsNumber - 1);
 
             for (int i = 1; i < stepsNumber; i++) {
                 sequence.Append(material.DOColor(colorSteps[i], stepDuration));
@@ -192,13 +193,13 @@ public class BlenderController : MonoBehaviour {
         return sequence;
     }
 
-    private Color[] GenerateMixColorSteps() {
-        int ingredientsNumber = _ingredientsSet.Count;
+    private Color[] GenerateMixColorSteps(ICollection<IngredientController> ingredients) {
+        int ingredientsNumber = ingredients.Count;
         Color[] colorSteps = new Color[ingredientsNumber];
 
         Color mixColor = Color.black;
         int i = 0;
-        foreach (var ingredient in _ingredientsSet) {
+        foreach (var ingredient in ingredients) {
             mixColor += ingredient.ingredientManager.ingredientColor;
             colorSteps[i] = mixColor / (i + 1);
             colorSteps[i].a = 1;
@@ -206,6 +207,15 @@ public class BlenderController : MonoBehaviour {
         }
 
         return colorSteps;
+    }
+
+    private async Task DisposeIngredients(ICollection<IngredientController> ingredients, float duration) {
+        int stepDuration = Mathf.FloorToInt(duration / ingredients.Count * 1000);
+        foreach (var ingredient in ingredients) {
+            await Task.Delay(stepDuration);
+            ingredient.ingredientManager.Release(ingredient);
+        }
+        ingredients.Clear();
     }
 
     #endregion Main functionality -------------------------------------------------
