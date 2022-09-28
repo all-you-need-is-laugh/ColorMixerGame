@@ -121,6 +121,9 @@ public class GameManager : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.N)) {
             StartNextLevel();
         }
+        else if (Input.GetKeyDown(KeyCode.Backspace)) {
+            debugPoints.Clear();
+        }
     }
 
     private void HandleTouch() {
@@ -240,22 +243,33 @@ public class GameManager : MonoBehaviour {
 
     #region Debug functionality -------------------------------------------------
 
-    struct PointWithColor {
-        public Vector3 point;
+    struct DPoint {
+        public Vector3 position;
         public Color color;
+        public float radius;
+        public bool wire;
     }
 
-    private List<PointWithColor> debugPoints = new List<PointWithColor>();
+    private List<DPoint> debugPoints = new List<DPoint>();
 
-    private void DebugPoint(Vector3 point, Color color) {
-        debugPoints.Add(new PointWithColor { point = point, color = color });
+    public void DebugPoint(Vector3 position, Color color, float radius = 0.01f, bool wire = false) {
+        debugPoints.Add(new DPoint { position = position, color = color, radius = radius, wire = wire });
     }
 
     private void OnDrawGizmos() {
-        foreach (PointWithColor pair in debugPoints) {
-            Gizmos.color = pair.color;
-            Gizmos.DrawSphere(pair.point, 0.01f);
+        var originalColor = Gizmos.color;
+
+        foreach (DPoint point in debugPoints) {
+            Gizmos.color = point.color;
+            if (point.wire) {
+                Gizmos.DrawWireSphere(point.position, point.radius);
         }
+            else {
+                Gizmos.DrawSphere(point.position, point.radius);
+            }
+        }
+
+        Gizmos.color = originalColor;
     }
 
     #endregion Debug functionality -------------------------------------------------
