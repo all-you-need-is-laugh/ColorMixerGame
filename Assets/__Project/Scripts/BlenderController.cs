@@ -66,7 +66,8 @@ public class BlenderController : MonoBehaviour {
         _jugStartRotation = _jug.rotation.eulerAngles;
 
         _jugContentMaterial = _jugContent.GetComponent<Renderer>().material;
-        _jugContentMaterial.SetFloat("_Fill", 0);
+
+        Reset();
     }
 
     private void Update() {
@@ -146,6 +147,10 @@ public class BlenderController : MonoBehaviour {
             .Append(_jug.DORotate(_jugStartRotation, animationDuration))
             .Join(_jug.DOMove(_jugStartPosition, animationDuration))
             .AsyncWaitForCompletion();
+    }
+
+    public void Reset() {
+        _jugContentMaterial.SetFloat("_Fill", 0);
     }
 
     #endregion Main functionality -------------------------------------------------
