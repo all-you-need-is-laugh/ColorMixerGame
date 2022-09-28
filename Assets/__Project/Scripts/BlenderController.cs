@@ -128,5 +128,14 @@ public class BlenderController : MonoBehaviour {
         Debug.Log("Mixed!");
     }
 
+    public async Task ResetJugTransform(float animationDuration = 0.5f) {
+        Sequence animationSequence = DOTween.Sequence();
+
+        await animationSequence
+            .Append(_jug.DORotate(_jugStartRotation, animationDuration))
+            .Join(_jug.DOMove(_jugStartPosition, animationDuration))
+            .AsyncWaitForCompletion();
+    }
+
     #endregion Main functionality -------------------------------------------------
 }

@@ -158,9 +158,13 @@ public class GameManager : MonoBehaviour {
             await _blenderController.OpenLid();
 
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
+
             await ingredientController.MoveToAsync(_blenderController.jugEntryPointPosition);
 
-            await Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token);
+            await Task.WhenAll(
+                _blenderController.ResetJugTransform(),
+                Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token)
+            );
 
             await _blenderController.CloseLid();
         }
@@ -263,7 +267,7 @@ public class GameManager : MonoBehaviour {
             Gizmos.color = point.color;
             if (point.wire) {
                 Gizmos.DrawWireSphere(point.position, point.radius);
-        }
+            }
             else {
                 Gizmos.DrawSphere(point.position, point.radius);
             }
