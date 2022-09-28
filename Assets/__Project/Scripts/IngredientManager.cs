@@ -38,6 +38,8 @@ public class IngredientManager : ScriptableObject {
     public IngredientController Acquire(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject instance = Instantiate(ingredientPrefab, position, rotation, parent);
 
+        instance.name += " " + instance.GetInstanceID();
+
         var ingredientController = instance.GetComponent<IngredientController>();
         ingredientController.ingredientManager = this;
 
