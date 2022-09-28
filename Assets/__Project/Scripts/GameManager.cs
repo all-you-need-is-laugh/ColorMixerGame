@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
     #region Fields, properties, constants -------------------------------------------------
 
     private const float INGREDIENTS_ROTATION_PERSPECTIVE_K = 1f;
-    private static GameManager _instance;
+    public static GameManager instance { get; private set; }
     private int _currentLevelIndex = 0;
     private CancellationTokenSource _lidOpenedWaitCts;
     private Task _ingredientMovementTask;
@@ -59,13 +59,13 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start() {
-        if (_instance != null) {
+        if (instance != null) {
             Debug.LogError($"Attempt to instantiate more than one {GetType().Name} component!", this);
-            Debug.LogError($"Click on this message to find existing instance of {GetType().Name} component", _instance);
+            Debug.LogError($"Click on this message to find existing instance of {GetType().Name} component", instance);
             return;
         }
         else {
-            _instance = this;
+            instance = this;
         }
 
         if (_levels.Length == 0) {
