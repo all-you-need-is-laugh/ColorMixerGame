@@ -28,6 +28,9 @@ public class BlenderController : MonoBehaviour {
     private Transform _jugEntryPoint;
 
     [SerializeField]
+    private GameObject _jugContent;
+
+    [SerializeField]
     private float _mixDuration = 3;
 
     [SerializeField]
@@ -49,6 +52,7 @@ public class BlenderController : MonoBehaviour {
     private Task _emptyTask = Task.FromResult<object>(null);
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
+    private Material _jugContentMaterial;
 
     public Vector3 jugEntryPointPosition { get => _jugEntryPoint.position; }
 
@@ -60,6 +64,9 @@ public class BlenderController : MonoBehaviour {
         _lidStartPosition = _lid.position;
         _jugStartPosition = _jug.position;
         _jugStartRotation = _jug.rotation.eulerAngles;
+
+        _jugContentMaterial = _jugContent.GetComponent<Renderer>().material;
+        _jugContentMaterial.SetFloat("_Fill", 0);
     }
 
     private void Update() {
@@ -71,6 +78,7 @@ public class BlenderController : MonoBehaviour {
         Debug.Assert(_openLidPosition != null, $"Specify animation end point object to {GetType().Name} component!", this);
         Debug.Assert(_jugEntryPoint != null, $"Specify ingredient movement end point object to {GetType().Name} component!", this);
         Debug.Assert(_jug != null, $"Specify jug object to {GetType().Name} component!", this);
+        Debug.Assert(_jugContent != null, $"Specify jug content object to {GetType().Name} component!", this);
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
@@ -121,8 +129,11 @@ public class BlenderController : MonoBehaviour {
 
         _lid.SetParent(_jug);
 
-        await _jug
-            .DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false)
+        Sequence animationSequence = DOTween.Sequence();
+        await animationSequence
+            .Append(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
+            .Join(_jugContentMaterial.DOFloat(1, "_Fill", _mixDuration))
+            .Join(_jugContentMaterial.DOColor((Color.yellow + Color.magenta) / 2, _mixDuration))
             .AsyncWaitForCompletion();
 
         Debug.Log("Mixed!");
