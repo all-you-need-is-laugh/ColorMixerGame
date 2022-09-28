@@ -149,12 +149,16 @@ public class BlenderController : MonoBehaviour {
 
         _lid.SetParent(_jug);
 
+        Color[] colorSteps = GenerateMixColorSteps();
+
         await DOTween.Sequence()
             .Join(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
-            .Join(GenerateMixColorAnimation())
+            .Join(AnimateColorMixing(_jugContentMaterial, colorSteps))
             .AsyncWaitForCompletion();
 
-        Debug.Log("Mixed!");
+        Color finalColor = colorSteps[colorSteps.Length - 1];
+
+        Debug.Log($"Mixed to {finalColor}!");
     }
 
     public async Task ResetJugTransform(float animationDuration = 0.5f) {
@@ -170,27 +174,38 @@ public class BlenderController : MonoBehaviour {
         _jugContentMaterial.SetFloat("_Fill", 0);
     }
 
-    private Sequence GenerateMixColorAnimation() {
-        var ingredients = _ingredientsSet.ToArray<IngredientController>();
+    private Sequence AnimateColorMixing(Material material, Color[] colorSteps) {
+        material.SetColor("_Color", colorSteps[0]);
 
-        _jugContentMaterial.SetColor("_Color", ingredients[0].ingredientManager.ingredientColor);
-
-        int ingredientsNumber = ingredients.Length;
+        int stepsNumber = colorSteps.Length;
         Sequence sequence = DOTween.Sequence()
-            .Join(_jugContentMaterial.DOFloat(1, "_Fill", _mixDuration));
+            .Join(material.DOFloat(1, "_Fill", _mixDuration));
 
-        if (ingredientsNumber > 1) {
-            float stepDuration = _mixDuration / (ingredientsNumber - 1);
+        if (stepsNumber > 1) {
+            float stepDuration = _mixDuration / (stepsNumber - 1);
 
-            Color mixColor = Color.black;
-            for (int i = 1; i < ingredientsNumber; i++) {
-                mixColor += ingredients[i].ingredientManager.ingredientColor;
-                Color stepColor = mixColor / (i + 1);
-                sequence.Append(_jugContentMaterial.DOColor(stepColor, stepDuration));
+            for (int i = 1; i < stepsNumber; i++) {
+                sequence.Append(material.DOColor(colorSteps[i], stepDuration));
             }
         }
 
         return sequence;
+    }
+
+    private Color[] GenerateMixColorSteps() {
+        int ingredientsNumber = _ingredientsSet.Count;
+        Color[] colorSteps = new Color[ingredientsNumber];
+
+        Color mixColor = Color.black;
+        int i = 0;
+        foreach (var ingredient in _ingredientsSet) {
+            mixColor += ingredient.ingredientManager.ingredientColor;
+            colorSteps[i] = mixColor / (i + 1);
+            colorSteps[i].a = 1;
+            i++;
+        }
+
+        return colorSteps;
     }
 
     #endregion Main functionality -------------------------------------------------
