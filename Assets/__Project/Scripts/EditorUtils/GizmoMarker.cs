@@ -10,8 +10,6 @@ public class GizmoMarker : MonoBehaviour {
     [SerializeField]
     private bool _disabled = false;
 
-    private static Color emptyColor { get; }
-
     void OnDrawGizmos() {
         if (!_disabled) {
             DrawMarker();
@@ -24,7 +22,7 @@ public class GizmoMarker : MonoBehaviour {
 
     void DrawMarker() {
         var originalColor = Gizmos.color;
-        Gizmos.color = _color == emptyColor ? Color.red : _color;
+        Gizmos.color = _color == Color.clear ? Color.red : _color;
 
         Gizmos.DrawSphere(transform.position, _radius);
 

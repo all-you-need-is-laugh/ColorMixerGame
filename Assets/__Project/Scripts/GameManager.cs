@@ -132,8 +132,11 @@ public class GameManager : MonoBehaviour {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
                     hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
+                    return;
                 }
-                else if (hitInfo.collider.CompareTag("MixButton") && _ingredientMovementTask != null) {
+
+                bool atLeastOneIngredientSentToBlender = _ingredientMovementTask != null;
+                if (atLeastOneIngredientSentToBlender && hitInfo.collider.CompareTag("MixButton")) {
                     if (_lidOpenedWaitCts != null) {
                         _lidOpenedWaitCts.Cancel();
                     }
@@ -176,7 +179,12 @@ public class GameManager : MonoBehaviour {
     }
 
     private async Task InteractWithMixButtonAsync() {
-        await _blenderController.Mix();
+        Color mixedColor = await _blenderController.Mix();
+        Color targetColor = _levels[_currentLevelIndex].targetColor;
+
+        float similarity = ColorCalculations.ColorsSimilarity(mixedColor, targetColor);
+
+        Debug.Log($"Mixed to {mixedColor}, but {targetColor} was needed! Similarity: {similarity}");
     }
 
     #endregion Interactions handling -------------------------------------------------

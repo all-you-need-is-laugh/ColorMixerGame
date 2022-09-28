@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -140,9 +141,9 @@ public class BlenderController : MonoBehaviour {
             .AsyncWaitForCompletion();
     }
 
-    public async Task Mix() {
+    public async Task<Color> Mix() {
         if (ingredientsNumber < 1) {
-            return;
+            throw new Exception($"Forbidden to call '{nameof(Mix)}' method if there are no ingredients in blender!");
         }
 
         await CloseLid();
@@ -159,7 +160,7 @@ public class BlenderController : MonoBehaviour {
 
         Color finalColor = colorSteps[colorSteps.Length - 1];
 
-        Debug.Log($"Mixed to {finalColor}!");
+        return finalColor;
     }
 
     public async Task ResetJugTransform(float animationDuration = 0.5f) {
