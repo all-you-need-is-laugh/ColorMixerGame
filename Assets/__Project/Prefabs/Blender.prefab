@@ -217,10 +217,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lid: {fileID: 4380901099284090}
-  _animationDuration: 1
-  _animationJumpPower: 0.5
-  _animationEndPoint: {fileID: 5983788852063529355}
-  ingredientMovementEndPoint: {fileID: 911986099259319834}
+  _lidAnimationDuration: 1
+  _lidAnimationJumpPower: 0.5
+  _openLidPosition: {fileID: 5983788852063529355}
+  _jug: {fileID: 4049869646888366}
+  _jugEntryPoint: {fileID: 911986099259319834}
+  _mixDuration: 3
+  _mixStrength: 5
+  _mixVibrato: 40
+  _mixRandomness: 90
 --- !u!1 &1949344047188952
 GameObject:
   m_ObjectHideFlags: 0

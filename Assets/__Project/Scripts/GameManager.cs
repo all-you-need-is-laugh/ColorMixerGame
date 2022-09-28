@@ -130,13 +130,14 @@ public class GameManager : MonoBehaviour {
             if (!_mixRequested && Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
                     hitInfo.collider.tag = "Ingredient_Non_Interactive";
-                    // Just ignore async nature of the call
                     _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                 }
                 else if (hitInfo.collider.CompareTag("MixButton")) {
                     _mixRequested = true;
-                    // Just ignore async nature of the call
-                    _ingredientMovementTask.ContinueWith<Task>((_) => InteractWithMixButtonAsync());
+                    _ingredientMovementTask.ContinueWith<Task>(
+                        (_) => InteractWithMixButtonAsync(),
+                        TaskScheduler.FromCurrentSynchronizationContext()
+                    );
                 }
             }
         }
@@ -154,7 +155,7 @@ public class GameManager : MonoBehaviour {
             await _blenderController.OpenLid();
 
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
-            await ingredientController.MoveToAsync(_blenderController.ingredientMovementEndPoint.position);
+            await ingredientController.MoveToAsync(_blenderController.jugEntryPointPosition);
 
             await Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token);
 
