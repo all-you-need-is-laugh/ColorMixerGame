@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 911986099259319834}
   - component: {fileID: 2541191227182683435}
   m_Layer: 0
-  m_Name: Ingredient_Movement_End_Point
+  m_Name: Blender_Jug_Entry_Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,7 +685,7 @@ GameObject:
   - component: {fileID: 6595068936448202459}
   - component: {fileID: 7351373979052008255}
   m_Layer: 3
-  m_Name: MixButtonCollider
+  m_Name: Blender_Mix_Button_Collider
   m_TagString: MixButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -820,7 +820,7 @@ GameObject:
   - component: {fileID: 5983788852063529355}
   - component: {fileID: 8682306344487398924}
   m_Layer: 0
-  m_Name: Blender_Lid_Animation_End_Point
+  m_Name: Blender_Lid_Open_Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
