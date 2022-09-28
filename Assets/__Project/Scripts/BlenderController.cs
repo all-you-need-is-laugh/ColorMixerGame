@@ -1,5 +1,5 @@
-using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -53,8 +53,11 @@ public class BlenderController : MonoBehaviour {
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
     private Material _jugContentMaterial;
+    private HashSet<IngredientController> _ingredientsSet = new HashSet<IngredientController>();
 
     public Vector3 jugEntryPointPosition { get => _jugEntryPoint.position; }
+
+    public int ingredientsNumber { get => _ingredientsSet.Count; }
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -80,6 +83,18 @@ public class BlenderController : MonoBehaviour {
         Debug.Assert(_jugEntryPoint != null, $"Specify ingredient movement end point object to {GetType().Name} component!", this);
         Debug.Assert(_jug != null, $"Specify jug object to {GetType().Name} component!", this);
         Debug.Assert(_jugContent != null, $"Specify jug content object to {GetType().Name} component!", this);
+    }
+
+    private void OnTriggerEnter(Collider collider) {
+        if (collider.TryGetComponent<IngredientController>(out IngredientController ingredientController)) {
+            _ingredientsSet.Add(ingredientController);
+        }
+    }
+
+    private void OnTriggerExit(Collider collider) {
+        if (collider.TryGetComponent<IngredientController>(out IngredientController ingredientController)) {
+            _ingredientsSet.Remove(ingredientController);
+        }
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
@@ -126,15 +141,17 @@ public class BlenderController : MonoBehaviour {
     }
 
     public async Task Mix() {
+        if (ingredientsNumber < 1) {
+            return;
+        }
+
         await CloseLid();
 
         _lid.SetParent(_jug);
 
-        Sequence animationSequence = DOTween.Sequence();
-        await animationSequence
-            .Append(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
-            .Join(_jugContentMaterial.DOFloat(1, "_Fill", _mixDuration))
-            .Join(_jugContentMaterial.DOColor((Color.yellow + Color.magenta) / 2, _mixDuration))
+        await DOTween.Sequence()
+            .Join(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
+            .Join(GenerateMixColorAnimation())
             .AsyncWaitForCompletion();
 
         Debug.Log("Mixed!");
@@ -151,6 +168,29 @@ public class BlenderController : MonoBehaviour {
 
     public void Reset() {
         _jugContentMaterial.SetFloat("_Fill", 0);
+    }
+
+    private Sequence GenerateMixColorAnimation() {
+        var ingredients = _ingredientsSet.ToArray<IngredientController>();
+
+        _jugContentMaterial.SetColor("_Color", ingredients[0].ingredientManager.ingredientColor);
+
+        int ingredientsNumber = ingredients.Length;
+        Sequence sequence = DOTween.Sequence()
+            .Join(_jugContentMaterial.DOFloat(1, "_Fill", _mixDuration));
+
+        if (ingredientsNumber > 1) {
+            float stepDuration = _mixDuration / (ingredientsNumber - 1);
+
+            Color mixColor = Color.black;
+            for (int i = 1; i < ingredientsNumber; i++) {
+                mixColor += ingredients[i].ingredientManager.ingredientColor;
+                Color stepColor = mixColor / (i + 1);
+                sequence.Append(_jugContentMaterial.DOColor(stepColor, stepDuration));
+            }
+        }
+
+        return sequence;
     }
 
     #endregion Main functionality -------------------------------------------------

@@ -96,8 +96,6 @@ public class GameManager : MonoBehaviour {
             _camera = Camera.main;
         }
 
-        _ingredientMovementTask = Task.FromResult<object>(null);
-
         // RestartLevel();
         // Add delay before start to let everything warm up - without it ingredients have non-zero angular velocity when
         // fall down at first time
@@ -135,8 +133,13 @@ public class GameManager : MonoBehaviour {
                     hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                 }
-                else if (hitInfo.collider.CompareTag("MixButton")) {
+                else if (hitInfo.collider.CompareTag("MixButton") && _ingredientMovementTask != null) {
+                    if (_lidOpenedWaitCts != null) {
+                        _lidOpenedWaitCts.Cancel();
+                    }
+
                     _mixRequested = true;
+
                     _ingredientMovementTask.ContinueWith<Task>(
                         (_) => InteractWithMixButtonAsync(),
                         TaskScheduler.FromCurrentSynchronizationContext()
@@ -160,6 +163,8 @@ public class GameManager : MonoBehaviour {
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
 
             await ingredientController.MoveToAsync(_blenderController.jugEntryPointPosition);
+
+            _lidOpenedWaitCts.Cancel();
 
             await Task.WhenAll(
                 _blenderController.ResetJugTransform(),
