@@ -104,10 +104,10 @@ public class BlenderController : MonoBehaviour {
 
     private void HandleLidInteractions() {
         if (Input.GetKeyDown(KeyCode.LeftBracket)) {
-            OpenLid();
+            OpenLidAsync();
         }
         else if (Input.GetKeyDown(KeyCode.RightBracket)) {
-            CloseLid();
+            CloseLidAsync();
         }
     }
 
@@ -115,7 +115,7 @@ public class BlenderController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
-    public Task OpenLid() {
+    public Task OpenLidAsync() {
         if (_isOpening) {
             return _emptyTask;
         }
@@ -128,7 +128,7 @@ public class BlenderController : MonoBehaviour {
             .AsyncWaitForCompletion();
     }
 
-    public Task CloseLid() {
+    public Task CloseLidAsync() {
         if (_isClosing) {
             return _emptyTask;
         }
@@ -146,7 +146,7 @@ public class BlenderController : MonoBehaviour {
             throw new Exception($"Forbidden to call '{nameof(Mix)}' method if there are no ingredients in blender!");
         }
 
-        await CloseLid();
+        await CloseLidAsync();
 
         _lid.SetParent(_jug);
 
@@ -156,14 +156,14 @@ public class BlenderController : MonoBehaviour {
             .Join(_jug.DOShakeRotation(_mixDuration, _mixStrength, _mixVibrato, _mixRandomness, false))
             .Join(AnimateColorMixing(_jugContentMaterial, colorSteps, _mixDuration));
 
-        await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredients(_ingredients, _mixDuration));
+        await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredientsAsync(_ingredients, _mixDuration));
 
         Color finalColor = colorSteps[colorSteps.Length - 1];
 
         return finalColor;
     }
 
-    public async Task ResetJugTransform(float animationDuration = 0.5f) {
+    public async Task ResetJugTransformAsync(float animationDuration = 0.5f) {
         Sequence animationSequence = DOTween.Sequence();
 
         await animationSequence
@@ -210,7 +210,7 @@ public class BlenderController : MonoBehaviour {
         return colorSteps;
     }
 
-    private async Task DisposeIngredients(ICollection<IngredientController> ingredients, float duration) {
+    private async Task DisposeIngredientsAsync(ICollection<IngredientController> ingredients, float duration) {
         int stepDuration = Mathf.FloorToInt(duration / ingredients.Count * 1000);
         foreach (var ingredient in ingredients) {
             await Task.Delay(stepDuration);

@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour {
             }
             _lidOpenedWaitCts = new CancellationTokenSource();
 
-            await _blenderController.OpenLid();
+            await _blenderController.OpenLidAsync();
 
             _ = ingredientController.ingredientManager.RenewAtAsync(ingredient.transform.position, ingredient.transform.rotation, ingredient.transform.parent);
 
@@ -170,11 +170,11 @@ public class GameManager : MonoBehaviour {
             _lidOpenedWaitCts.Cancel();
 
             await Task.WhenAll(
-                _blenderController.ResetJugTransform(),
+                _blenderController.ResetJugTransformAsync(),
                 Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token)
             );
 
-            await _blenderController.CloseLid();
+            await _blenderController.CloseLidAsync();
         }
     }
 
