@@ -18,21 +18,27 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private LevelSettings[] _levels;
 
+    [Header("UI elements settings")]
     [SerializeField]
     private Image _orderColorImage;
 
+
+    [Header("Ingredients settings")]
     [SerializeField]
     private Transform _ingredientsHolder;
 
     [SerializeField]
     private float _ingredientsPlacementWidth = .5f;
 
-    [SerializeField]
-    private float _waitBeforeCloseLid = 2;
 
+    [Header("Blender settings")]
     [SerializeField]
     private BlenderController _blenderController;
 
+    [SerializeField]
+    private float _waitBeforeCloseLid = 2;
+
+    [Space()]
     [SerializeField]
     private LayerMask _interactionsLayerMask;
 
@@ -58,6 +64,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    private void OnValidate() {
+        Debug.Assert(_levels.Length != 0, $"Add at least 1 level to {GetType().Name} component!", this);
+        Debug.Assert(_orderColorImage != null, $"Specify order UI Image object to {GetType().Name} component!", this);
+        Debug.Assert(_ingredientsHolder != null, $"Specify ingredients holder object to {GetType().Name} component!", this);
+        Debug.Assert(_blenderController != null, $"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
+        Debug.Assert(_camera != null || Camera.main != null, $"Specify camera to {GetType().Name} component or add main camera to the scene!", this);
+    }
+
     private void Start() {
         if (instance != null) {
             Debug.LogError($"Attempt to instantiate more than one {GetType().Name} component!", this);
@@ -68,31 +82,7 @@ public class GameManager : MonoBehaviour {
             instance = this;
         }
 
-        if (_levels.Length == 0) {
-            Debug.LogError($"Add at least 1 level to {GetType().Name} component!", this);
-            return;
-        }
-
-        if (_orderColorImage == null) {
-            Debug.LogError($"Specify order UI Image object to {GetType().Name} component!", this);
-            return;
-        }
-
-        if (_ingredientsHolder == null) {
-            Debug.LogError($"Specify ingredients holder to {GetType().Name} component!", this);
-            return;
-        }
-
-        if (_blenderController == null) {
-            Debug.LogError($"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
-            return;
-        }
-
         if (_camera == null) {
-            if (Camera.main == null) {
-                Debug.LogError($"Specify camera to {GetType().Name} component or add main camera to the scene!", this);
-                return;
-            }
             _camera = Camera.main;
         }
 
