@@ -163,10 +163,8 @@ public class BlenderController : MonoBehaviour {
         return finalColor;
     }
 
-    public async Task ResetJugTransformAsync(float animationDuration = 0.5f) {
-        Sequence animationSequence = DOTween.Sequence();
-
-        await animationSequence
+    public Task ResetJugTransformAsync(float animationDuration = 0.5f) {
+        return DOTween.Sequence()
             .Append(_jug.DORotate(_jugStartRotation, animationDuration))
             .Join(_jug.DOMove(_jugStartPosition, animationDuration))
             .AsyncWaitForCompletion();

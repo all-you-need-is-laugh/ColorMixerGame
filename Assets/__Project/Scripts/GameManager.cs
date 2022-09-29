@@ -10,9 +10,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
-    [Tooltip("Main camera will be picked by default")]
     [SerializeField]
-    private Camera _camera;
+    private CameraController _cameraController;
 
     [SerializeField]
     private LevelSettings[] _levels;
@@ -68,7 +67,7 @@ public class GameManager : MonoBehaviour {
         Debug.Assert(_orderColorImage != null, $"Specify order UI Image object to {GetType().Name} component!", this);
         Debug.Assert(_ingredientsHolder != null, $"Specify ingredients holder object to {GetType().Name} component!", this);
         Debug.Assert(_blenderController != null, $"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
-        Debug.Assert(_camera != null || Camera.main != null, $"Specify camera to {GetType().Name} component or add main camera to the scene!", this);
+        Debug.Assert(_cameraController != null, $"Specify {nameof(CameraController)} component to {GetType().Name} component!", this);
     }
 
     private void Start() {
@@ -79,10 +78,6 @@ public class GameManager : MonoBehaviour {
         }
         else {
             instance = this;
-        }
-
-        if (_camera == null) {
-            _camera = Camera.main;
         }
 
         // RestartLevel();
@@ -108,14 +103,11 @@ public class GameManager : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.N)) {
             StartNextLevel();
         }
-        else if (Input.GetKeyDown(KeyCode.Backspace)) {
-            debugPoints.Clear();
-        }
     }
 
     private void HandleTouch() {
         if (Input.GetMouseButtonDown(0)) {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _cameraController.camera.ScreenPointToRay(Input.mousePosition);
 
             if (!_mixRequested && Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
@@ -169,6 +161,9 @@ public class GameManager : MonoBehaviour {
 
     private async Task InteractWithMixButtonAsync() {
         Color mixedColor = await _blenderController.Mix();
+
+        await Task.WhenAll(_blenderController.OpenLidAsync(), _cameraController.MoveToResultsViewAsync());
+
         Color targetColor = _levels[_currentLevelIndex].targetColor;
 
         float similarity = ColorCalculations.ColorsSimilarity(mixedColor, targetColor);
