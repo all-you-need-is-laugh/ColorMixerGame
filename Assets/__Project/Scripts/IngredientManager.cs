@@ -13,10 +13,6 @@ public class IngredientManager : ScriptableObject {
 
     #endregion Editable settings -------------------------------------------------
 
-    #region Fields, properties, constants -------------------------------------------------
-
-    #endregion Fields, properties, constants -------------------------------------------------
-
     #region ScriptableObject Hooks -------------------------------------------------
 
     private void OnValidate() {

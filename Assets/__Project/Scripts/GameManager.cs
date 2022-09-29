@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private Image _orderColorImage;
 
+    [SerializeField]
+    private ResultsUIController _resultsUiController;
+
 
     [Header("Ingredients settings")]
     [SerializeField]
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour {
         Debug.Assert(_ingredientsHolder != null, $"Specify ingredients holder object to {GetType().Name} component!", this);
         Debug.Assert(_blenderController != null, $"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
         Debug.Assert(_cameraController != null, $"Specify {nameof(CameraController)} component to {GetType().Name} component!", this);
+        Debug.Assert(_resultsUiController != null, $"Specify {nameof(ResultsUIController)} component to {GetType().Name} component!", this);
     }
 
     private void Start() {
@@ -160,15 +164,16 @@ public class GameManager : MonoBehaviour {
     }
 
     private async Task InteractWithMixButtonAsync() {
-        Color mixedColor = await _blenderController.Mix();
+        Color resultColor = await _blenderController.Mix();
+        Color targetColor = _levels[_currentLevelIndex].targetColor;
 
         await Task.WhenAll(_blenderController.OpenLidAsync(), _cameraController.MoveToResultsViewAsync());
 
-        Color targetColor = _levels[_currentLevelIndex].targetColor;
+        _resultsUiController.SetTargetColor(targetColor);
+        _resultsUiController.SetResultColor(resultColor);
+        _resultsUiController.SetColorSimilarity(ColorCalculations.ColorsSimilarity(resultColor, targetColor));
 
-        float similarity = ColorCalculations.ColorsSimilarity(mixedColor, targetColor);
-
-        Debug.Log($"Mixed to {mixedColor}, but {targetColor} was needed! Similarity: {similarity}");
+        await _resultsUiController.ShowAsync();
     }
 
     #endregion Interactions handling -------------------------------------------------

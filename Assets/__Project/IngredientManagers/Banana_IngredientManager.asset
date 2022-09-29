@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baac217d8cf43954796ea1f61a02adc2, type: 3}
   m_Name: Banana_IngredientManager
   m_EditorClassIdentifier: 
-  ingredientColor: {r: 0.6313726, g: 0.5529412, b: 0.34117648, a: 1}
+  ingredientColor: {r: 0.990566, g: 0.93871355, b: 0.6578853, a: 1}
   ingredientPrefab: {fileID: 8374663798827413360, guid: 897bcf8593e8a214db9a4a9aa50c0958,
     type: 3}
+  renewDelay: 1
