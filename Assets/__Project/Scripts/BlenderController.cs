@@ -225,7 +225,7 @@ public class BlenderController : MonoBehaviour {
             }
         }
 
-        sequence.Join(material.DOFloat(1, "_Fill", duration));
+        sequence.Insert(0, material.DOFloat(1, "_Fill", duration));
 
         return sequence;
     }
