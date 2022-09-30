@@ -1,11 +1,9 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Responds for game rules, interactions handling and level switching
-// TODO: Refactor Game manager to comply Single responsibility principle
+// Responds for game objects placement and interactions with them
 
 public class GameManager : MonoBehaviour {
     #region Editable settings -------------------------------------------------

@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
+// Responds for camera movement
+
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour {
     #region Editable settings -------------------------------------------------

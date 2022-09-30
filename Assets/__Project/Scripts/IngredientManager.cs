@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
-// Responds for ingredient instances
+// Responds for ingredient instances lifecycle
 
 [CreateAssetMenu(fileName = "New_IngredientManager", menuName = "ColorMixer/Ingredient Manager")]
 public class IngredientManager : ScriptableObject {

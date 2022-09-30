@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+// Responds for levels lifecycle
+
 public class LevelManager : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 

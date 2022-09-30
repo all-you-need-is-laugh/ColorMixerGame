@@ -11,7 +11,7 @@ public class MonoBehaviourDebug : MonoBehaviour {
 
     private List<DPoint> debugPoints = new List<DPoint>();
 
-    // Most probably this hook is not implemented by user
+    // Most probably that this hook is not implemented by user
     private void LateUpdate() {
         if (Input.GetKeyDown(KeyCode.Backspace)) {
             debugPoints.Clear();

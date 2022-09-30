@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
+// Responds for RectTransform movement
+
 [RequireComponent(typeof(RectTransform))]
 public class RectTransformController : MonoBehaviour {
 

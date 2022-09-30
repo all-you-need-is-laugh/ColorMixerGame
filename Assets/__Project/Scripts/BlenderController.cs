@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
+// Responds for interactions with Blender
+
 public class BlenderController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 

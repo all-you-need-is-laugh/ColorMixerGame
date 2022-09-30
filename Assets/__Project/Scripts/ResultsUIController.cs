@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Responds for interactions with "results" UI
+
 public class ResultsUIController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
