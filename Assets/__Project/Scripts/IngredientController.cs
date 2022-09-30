@@ -19,6 +19,8 @@ public class IngredientController : MonoBehaviour {
 
     #region Fields, properties, constants -------------------------------------------------
 
+    public bool interactable = true;
+
     private IngredientManager _ingredientManager;
     public IngredientManager ingredientManager {
         get => _ingredientManager;

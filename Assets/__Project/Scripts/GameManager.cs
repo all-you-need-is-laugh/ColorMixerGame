@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour {
 
             if (!_mixRequested && Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
                 if (hitInfo.collider.CompareTag("Ingredient")) {
-                    hitInfo.collider.tag = "Ingredient_Non_Interactive";
                     _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                     return;
                 }
@@ -140,7 +139,9 @@ public class GameManager : MonoBehaviour {
     private async Task InteractWithIngredientAsync(GameObject ingredient) {
         IngredientController ingredientController = ingredient.GetComponent<IngredientController>();
 
-        if (ingredientController != null) {
+        if (ingredientController?.interactable == true) {
+            ingredientController.interactable = false;
+
             if (_lidOpenedWaitCts != null) {
                 _lidOpenedWaitCts.Cancel();
             }
