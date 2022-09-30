@@ -47,7 +47,21 @@ public class IngredientController : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
+    public void FreezePhysics() {
+        // Leave RigidbodyConstraints.FreezePositionY untouched!
+        _rigidbody.constraints =
+            RigidbodyConstraints.FreezePositionX
+            | RigidbodyConstraints.FreezePositionZ
+            | RigidbodyConstraints.FreezeRotation;
+    }
+
+    public void UnfreezePhysics() {
+        _rigidbody.constraints = RigidbodyConstraints.None;
+    }
+
     public Task MoveToAsync(Vector3 destination) {
+        UnfreezePhysics();
+
         return _rigidbody
             .DOJump(destination, _animationJumpPower, 1, _animationDuration)
             .AsyncWaitForCompletion();

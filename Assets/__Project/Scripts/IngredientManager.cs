@@ -74,6 +74,7 @@ public class IngredientManager : ScriptableObject {
     private void OnTakeFromPool(IngredientController ingredient) {
         ingredient.gameObject.SetActive(true);
         ingredient.interactable = true;
+        ingredient.FreezePhysics();
     }
 
     #endregion ObjectPool Hooks -------------------------------------------------
