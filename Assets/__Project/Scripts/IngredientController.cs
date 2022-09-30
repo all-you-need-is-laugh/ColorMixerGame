@@ -39,7 +39,7 @@ public class IngredientController : MonoBehaviour {
 
     #region MonoBehaviour Hooks -------------------------------------------------
 
-    private void Start() {
+    private void Awake() {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -52,6 +52,11 @@ public class IngredientController : MonoBehaviour {
             .DOJump(destination, _animationJumpPower, 1, _animationDuration)
             .AsyncWaitForCompletion();
 
+    }
+
+    public void ResetPhysics() {
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     #endregion Main functionality -------------------------------------------------
