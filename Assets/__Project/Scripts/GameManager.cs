@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
             Ray ray = _cameraController.camera.ScreenPointToRay(Input.mousePosition);
 
             if (!_mixRequested && Physics.Raycast(ray, out RaycastHit hitInfo, 10, _interactionsLayerMask)) {
-                if (hitInfo.collider.CompareTag("Ingredient")) {
+                if (hitInfo.collider.CompareTag(IngredientController.TAG)) {
                     _ingredientMovementTask = InteractWithIngredientAsync(hitInfo.collider.gameObject);
                     return;
                 }

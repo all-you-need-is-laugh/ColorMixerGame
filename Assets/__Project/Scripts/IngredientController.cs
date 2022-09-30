@@ -19,6 +19,9 @@ public class IngredientController : MonoBehaviour {
 
     #region Fields, properties, constants -------------------------------------------------
 
+    public static readonly string TAG = "Ingredient";
+    public static readonly string LAYER_NAME = "Interactable";
+
     public bool interactable = true;
 
     private IngredientManager _ingredientManager;
@@ -41,6 +44,11 @@ public class IngredientController : MonoBehaviour {
 
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody>();
+    }
+
+    private void OnValidate() {
+        Debug.Assert(CompareTag(TAG), $"{GetType().Name} component must be attached to object with tag \"{TAG}\"!", this);
+        Debug.Assert(gameObject.layer == LayerMask.NameToLayer(LAYER_NAME), $"{GetType().Name} component must be attached to object with layer \"{LAYER_NAME}\"!", this);
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
