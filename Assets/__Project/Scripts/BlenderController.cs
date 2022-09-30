@@ -76,7 +76,7 @@ public class BlenderController : MonoBehaviour {
 
         _jugContentMaterial = _jugContent.GetComponent<Renderer>().material;
 
-        Reset();
+        ResetJugContentFillLevel();
     }
 
     private void Update() {
@@ -179,7 +179,10 @@ public class BlenderController : MonoBehaviour {
 
         await _jug
             .DOMove(_jugHiddenResetPoint.position, animationDuration / 2)
-            .OnStepComplete(() => _jugContentMaterial.SetFloat("_Fill", 0))
+            .OnComplete(() => {
+                ResetJugContentFillLevel();
+                ResetJugPhysics();
+            })
             .AsyncWaitForCompletion();
 
         await _jug
@@ -193,23 +196,24 @@ public class BlenderController : MonoBehaviour {
         return DOTween.Sequence()
             .Join(_jug.DORotate(_jugStartRotation, animationDuration))
             .Join(_jug.DOMove(_jugStartPosition, animationDuration))
-            .OnComplete(() => {
-                _jugRigidbody.velocity = Vector3.zero;
-                _jugRigidbody.angularVelocity = Vector3.zero;
-            })
+            .OnComplete(ResetJugPhysics)
             .AsyncWaitForCompletion();
     }
 
-    public void Reset() {
+    public void ResetJugContentFillLevel() {
         _jugContentMaterial.SetFloat("_Fill", 0);
+    }
+
+    public void ResetJugPhysics() {
+        _jugRigidbody.velocity = Vector3.zero;
+        _jugRigidbody.angularVelocity = Vector3.zero;
     }
 
     private Sequence AnimateColorMixing(Material material, Color[] colorSteps, float duration) {
         material.SetColor("_Color", colorSteps[0]);
 
         int stepsNumber = colorSteps.Length;
-        Sequence sequence = DOTween.Sequence()
-            .Join(material.DOFloat(1, "_Fill", duration));
+        Sequence sequence = DOTween.Sequence();
 
         if (stepsNumber > 1) {
             float stepDuration = duration / (stepsNumber - 1);
@@ -218,6 +222,8 @@ public class BlenderController : MonoBehaviour {
                 sequence.Append(material.DOColor(colorSteps[i], stepDuration));
             }
         }
+
+        sequence.Join(material.DOFloat(1, "_Fill", duration));
 
         return sequence;
     }
@@ -239,10 +245,11 @@ public class BlenderController : MonoBehaviour {
     }
 
     private async Task DisposeIngredientsAsync(ICollection<IngredientController> ingredients, float duration) {
-        int stepDuration = Mathf.FloorToInt(duration / ingredients.Count * 1000);
+        int halfStepDuration = Mathf.FloorToInt(duration / ingredients.Count * 1000 / 2);
         foreach (var ingredient in ingredients) {
-            await Task.Delay(stepDuration);
+            await Task.Delay(halfStepDuration);
             ingredient.ingredientManager.Release(ingredient);
+            await Task.Delay(halfStepDuration);
         }
         ingredients.Clear();
     }
