@@ -53,8 +53,8 @@ public class BlenderController : MonoBehaviour {
     #region Fields, properties, constants -------------------------------------------------
 
     private Vector3 _lidStartPosition;
-    private bool _isOpening = false;
-    private bool _isClosing = true;
+    private Task _lidOpeningTask;
+    private Task _lidClosingTask;
     private Task _emptyTask = Task.FromResult<object>(null);
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
@@ -124,29 +124,25 @@ public class BlenderController : MonoBehaviour {
     #region Main functionality -------------------------------------------------
 
     public Task OpenLidAsync() {
-        if (_isOpening) {
-            return _emptyTask;
+        if (_lidOpeningTask == null) {
+            _lidOpeningTask = _lid
+                .DOJump(_openLidPosition.position, _lidAnimationJumpPower, 1, _lidAnimationDuration)
+                .OnComplete(() => _lidOpeningTask = null)
+                .AsyncWaitForCompletion();
         }
 
-        _isOpening = true;
-        _isClosing = false;
-
-        return _lid
-            .DOJump(_openLidPosition.position, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-            .AsyncWaitForCompletion();
+        return _lidOpeningTask;
     }
 
     public Task CloseLidAsync() {
-        if (_isClosing) {
-            return _emptyTask;
+        if (_lidClosingTask == null) {
+            _lidClosingTask = _lid
+                .DOJump(_lidStartPosition, _lidAnimationJumpPower, 1, _lidAnimationDuration)
+                .OnComplete(() => _lidClosingTask = null)
+                .AsyncWaitForCompletion();
         }
 
-        _isOpening = false;
-        _isClosing = true;
-
-        return _lid
-            .DOJump(_lidStartPosition, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-            .AsyncWaitForCompletion();
+        return _lidClosingTask;
     }
 
     public async Task<Color> MixAsync() {

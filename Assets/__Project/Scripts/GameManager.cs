@@ -132,8 +132,6 @@ public class GameManager : MonoBehaviour {
 
             await ingredientController.MoveToAsync(_blenderController.jugEntryPointPosition);
 
-            _lidOpenedWaitCts.Cancel();
-
             await Task.WhenAll(
                 _blenderController.ResetJugTransformAsync(),
                 Task.Delay(Mathf.FloorToInt(_waitBeforeCloseLid * 1000), _lidOpenedWaitCts.Token)
