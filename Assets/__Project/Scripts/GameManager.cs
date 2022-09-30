@@ -215,6 +215,8 @@ public class GameManager : MonoBehaviour {
         );
 
         await _blenderController.CloseLidAsync();
+
+        _mixRequested = false;
     }
 
     public async Task StartLevelAsync(Color targetColor, IngredientManager[] ingredients) {
