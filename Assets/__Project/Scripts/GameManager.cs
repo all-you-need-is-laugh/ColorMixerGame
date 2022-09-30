@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private CameraController _cameraController;
 
-    [SerializeField]
-    private LevelSettings[] _levels;
-
     [Header("UI elements settings")]
     [SerializeField]
     private Image _orderColorImage;
@@ -49,10 +46,10 @@ public class GameManager : MonoBehaviour {
 
     private const float INGREDIENTS_ROTATION_PERSPECTIVE_K = 1f;
     public static GameManager instance { get; private set; }
-    private int _currentLevelIndex = 0;
     private CancellationTokenSource _lidOpenedWaitCts;
     private Task _ingredientMovementTask;
     private bool _mixRequested = false;
+    private Color _currentTargetColor;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -66,7 +63,6 @@ public class GameManager : MonoBehaviour {
     }
 
     private void OnValidate() {
-        Debug.Assert(_levels.Length != 0, $"Add at least 1 level to {GetType().Name} component!", this);
         Debug.Assert(_orderColorImage != null, $"Specify order UI Image object to {GetType().Name} component!", this);
         Debug.Assert(_ingredientsHolder != null, $"Specify ingredients holder object to {GetType().Name} component!", this);
         Debug.Assert(_blenderController != null, $"Specify {nameof(BlenderController)} component to {GetType().Name} component!", this);
@@ -74,7 +70,7 @@ public class GameManager : MonoBehaviour {
         Debug.Assert(_resultsUiController != null, $"Specify {nameof(ResultsUIController)} component to {GetType().Name} component!", this);
     }
 
-    private void Start() {
+    private void Awake() {
         if (instance != null) {
             Debug.LogError($"Attempt to instantiate more than one {GetType().Name} component!", this);
             Debug.LogError($"Click on this message to find existing instance of {GetType().Name} component", instance);
@@ -83,31 +79,15 @@ public class GameManager : MonoBehaviour {
         else {
             instance = this;
         }
-
-        // RestartLevel();
-        // Add delay before start to let everything warm up - without it ingredients have non-zero angular velocity when
-        // fall down at first time
-        Invoke(nameof(RestartLevel), .5f);
     }
 
     private void Update() {
         HandleTouch();
-
-        HandleDebugActions();
     }
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
 
     #region Interactions handling -------------------------------------------------
-
-    private void HandleDebugActions() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            RestartLevel();
-        }
-        else if (Input.GetKeyDown(KeyCode.N)) {
-            StartNextLevel();
-        }
-    }
 
     private void HandleTouch() {
         if (Input.GetMouseButtonDown(0)) {
@@ -165,16 +145,17 @@ public class GameManager : MonoBehaviour {
     }
 
     private async Task InteractWithMixButtonAsync() {
-        Color resultColor = await _blenderController.Mix();
-        Color targetColor = _levels[_currentLevelIndex].targetColor;
+        Color resultColor = await _blenderController.MixAsync();
 
-        await Task.WhenAll(_blenderController.OpenLidAsync(), _cameraController.MoveToResultsViewAsync());
-
-        _resultsUiController.SetTargetColor(targetColor);
+        _resultsUiController.SetTargetColor(_currentTargetColor);
         _resultsUiController.SetResultColor(resultColor);
-        _resultsUiController.SetColorSimilarity(ColorCalculations.ColorsSimilarity(resultColor, targetColor));
+        _resultsUiController.SetColorSimilarity(ColorCalculations.ColorsSimilarity(resultColor, _currentTargetColor));
 
-        await _resultsUiController.ShowAsync();
+        await Task.WhenAll(
+            _blenderController.OpenLidAsync(),
+            _cameraController.MoveToResultsViewAsync(),
+            _resultsUiController.ShowAsync()
+        );
     }
 
     #endregion Interactions handling -------------------------------------------------
@@ -225,25 +206,23 @@ public class GameManager : MonoBehaviour {
         _orderColorImage.color = color;
     }
 
-    private void StartLevel(LevelSettings level) {
-        if (level == null) {
-            throw new Exception($"Unexpected attempt to start absent level ({_currentLevelIndex})");
-        }
-        Debug.Log("### > GameManager > StartLevel > level " + level);
-
-        SetOrderColor(level.targetColor);
-
+    private Task ResetSceneAsync() {
         CleanIngredientsHolder();
-        InstantiateIngredients(level.ingredients);
+
+        return Task.WhenAll(
+            _cameraController.MoveToStartPointAsync(),
+            _resultsUiController.HideAsync()
+        );
     }
 
-    private void RestartLevel() {
-        StartLevel(_levels[_currentLevelIndex]);
-    }
+    public async Task StartLevelAsync(Color targetColor, IngredientManager[] ingredients) {
+        await ResetSceneAsync();
 
-    private void StartNextLevel() {
-        _currentLevelIndex = (_currentLevelIndex + 1) % _levels.Length;
-        StartLevel(_levels[_currentLevelIndex]);
+        _currentTargetColor = targetColor;
+
+        SetOrderColor(targetColor);
+
+        InstantiateIngredients(ingredients);
     }
 
     #endregion Main functionality -------------------------------------------------

@@ -141,9 +141,9 @@ public class BlenderController : MonoBehaviour {
             .AsyncWaitForCompletion();
     }
 
-    public async Task<Color> Mix() {
+    public async Task<Color> MixAsync() {
         if (ingredientsNumber < 1) {
-            throw new Exception($"Forbidden to call '{nameof(Mix)}' method if there are no ingredients in blender!");
+            throw new Exception($"Forbidden to call '{nameof(MixAsync)}' method if there are no ingredients in blender!");
         }
 
         await CloseLidAsync();
@@ -165,7 +165,7 @@ public class BlenderController : MonoBehaviour {
 
     public Task ResetJugTransformAsync(float animationDuration = 0.5f) {
         return DOTween.Sequence()
-            .Append(_jug.DORotate(_jugStartRotation, animationDuration))
+            .Join(_jug.DORotate(_jugStartRotation, animationDuration))
             .Join(_jug.DOMove(_jugStartPosition, animationDuration))
             .AsyncWaitForCompletion();
     }

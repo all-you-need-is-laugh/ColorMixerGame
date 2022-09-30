@@ -39,7 +39,7 @@ public class RectTransformController : MonoBehaviour {
         }
 
         return _rect
-            .DOAnchorPos(_shownStatePosition, 3)
+            .DOAnchorPos(_shownStatePosition, duration)
             .AsyncWaitForCompletion();
     }
 
@@ -49,7 +49,7 @@ public class RectTransformController : MonoBehaviour {
         }
 
         return _rect
-            .DOAnchorPos(_hiddenStatePosition, 3)
+            .DOAnchorPos(_hiddenStatePosition, duration)
             .AsyncWaitForCompletion();
     }
 
