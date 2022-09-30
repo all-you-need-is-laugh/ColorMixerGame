@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour {
     private Task _ingredientMovementTask;
     private bool _mixRequested = false;
     private Color _currentTargetColor;
+    private bool _sequentialStart = false;
 
     #endregion Fields, properties, constants -------------------------------------------------
 
@@ -206,22 +207,28 @@ public class GameManager : MonoBehaviour {
         _orderColorImage.color = color;
     }
 
-    private Task ResetSceneAsync() {
+    private async Task ResetSceneAsync() {
         CleanIngredientsHolder();
 
-        return Task.WhenAll(
+        await Task.WhenAll(
             _cameraController.MoveToStartPointAsync(),
-            _resultsUiController.HideAsync()
+            _resultsUiController.HideAsync(),
+            _blenderController.ResetJugContentAsync()
         );
+
+        await _blenderController.CloseLidAsync();
     }
 
     public async Task StartLevelAsync(Color targetColor, IngredientManager[] ingredients) {
-        await ResetSceneAsync();
+        if (_sequentialStart) {
+            await ResetSceneAsync();
+        }
+
+        _sequentialStart = true;
 
         _currentTargetColor = targetColor;
 
         SetOrderColor(targetColor);
-
         InstantiateIngredients(ingredients);
     }
 

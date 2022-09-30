@@ -29,6 +29,9 @@ public class BlenderController : MonoBehaviour {
     private Transform _jugEntryPoint;
 
     [SerializeField]
+    private Transform _jugHiddenResetPoint;
+
+    [SerializeField]
     private GameObject _jugContent;
 
     [SerializeField]
@@ -55,6 +58,7 @@ public class BlenderController : MonoBehaviour {
     private Vector3 _jugStartRotation;
     private Material _jugContentMaterial;
     private HashSet<IngredientController> _ingredients = new HashSet<IngredientController>();
+    private Rigidbody _jugRigidbody;
 
     public Vector3 jugEntryPointPosition { get => _jugEntryPoint.position; }
 
@@ -68,6 +72,7 @@ public class BlenderController : MonoBehaviour {
         _lidStartPosition = _lid.position;
         _jugStartPosition = _jug.position;
         _jugStartRotation = _jug.rotation.eulerAngles;
+        _jugRigidbody = _jug.GetComponent<Rigidbody>();
 
         _jugContentMaterial = _jugContent.GetComponent<Renderer>().material;
 
@@ -81,7 +86,8 @@ public class BlenderController : MonoBehaviour {
     private void OnValidate() {
         Debug.Assert(_lid != null, $"Specify lid object to {GetType().Name} component!", this);
         Debug.Assert(_openLidPosition != null, $"Specify animation end point object to {GetType().Name} component!", this);
-        Debug.Assert(_jugEntryPoint != null, $"Specify ingredient movement end point object to {GetType().Name} component!", this);
+        Debug.Assert(_jugEntryPoint != null, $"Specify jug entry point object to {GetType().Name} component!", this);
+        Debug.Assert(_jugHiddenResetPoint != null, $"Specify jug hidden reset point object to {GetType().Name} component!", this);
         Debug.Assert(_jug != null, $"Specify jug object to {GetType().Name} component!", this);
         Debug.Assert(_jugContent != null, $"Specify jug content object to {GetType().Name} component!", this);
     }
@@ -148,6 +154,7 @@ public class BlenderController : MonoBehaviour {
 
         await CloseLidAsync();
 
+        var originalLidParent = _lid.parent;
         _lid.SetParent(_jug);
 
         Color[] colorSteps = GenerateMixColorSteps(_ingredients);
@@ -158,15 +165,38 @@ public class BlenderController : MonoBehaviour {
 
         await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredientsAsync(_ingredients, _mixDuration));
 
+        _lid.SetParent(originalLidParent);
+
         Color finalColor = colorSteps[colorSteps.Length - 1];
 
         return finalColor;
+    }
+
+    public async Task ResetJugContentAsync(float animationDuration = -1) {
+        if (animationDuration < 0) {
+            animationDuration = _lidAnimationDuration;
+        }
+
+        await _jug
+            .DOMove(_jugHiddenResetPoint.position, animationDuration / 2)
+            .OnStepComplete(() => _jugContentMaterial.SetFloat("_Fill", 0))
+            .AsyncWaitForCompletion();
+
+        await _jug
+            .DOJump(_jugStartPosition, 1, 1, animationDuration / 2)
+            .AsyncWaitForCompletion();
+
+        await ResetJugTransformAsync(0);
     }
 
     public Task ResetJugTransformAsync(float animationDuration = 0.5f) {
         return DOTween.Sequence()
             .Join(_jug.DORotate(_jugStartRotation, animationDuration))
             .Join(_jug.DOMove(_jugStartPosition, animationDuration))
+            .OnComplete(() => {
+                _jugRigidbody.velocity = Vector3.zero;
+                _jugRigidbody.angularVelocity = Vector3.zero;
+            })
             .AsyncWaitForCompletion();
     }
 
