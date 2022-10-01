@@ -206,14 +206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4db3b0baaa61f54da8bdce8533d9b24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lid: {fileID: 4380901099284090}
-  _lidAnimationDuration: 1
-  _lidAnimationJumpPower: 0.5
-  _openLidPosition: {fileID: 5983788852063529355}
+  _blenderLidController: {fileID: 750026870}
   _jug: {fileID: 4049869646888366}
   _jugEntryPoint: {fileID: 911986099259319834}
   _jugHiddenResetPoint: {fileID: 8992655061349309021}
   _jugContent: {fileID: 3696616317092743222}
+  _resetJugContentAnimationDuration: 1
   _mixDuration: 3
   _mixStrength: 5
   _mixVibrato: 40
@@ -242,6 +240,7 @@ GameObject:
   - component: {fileID: 4380901099284090}
   - component: {fileID: 33426495932501406}
   - component: {fileID: 23441774327627198}
+  - component: {fileID: 750026870}
   m_Layer: 0
   m_Name: Blender_Lid
   m_TagString: Untagged
@@ -314,6 +313,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &750026870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949344047188952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6618d0da085f16949beb7957007b4ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _openPosition: {fileID: 5983788852063529355}
+  _animationDuration: 1
+  _animationJumpPower: 0.5
 --- !u!1 &1640871770334984878
 GameObject:
   m_ObjectHideFlags: 0

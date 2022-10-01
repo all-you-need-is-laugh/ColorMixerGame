@@ -10,18 +10,8 @@ using UnityEngine;
 public class BlenderController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
-    [Header("Lid settings")]
     [SerializeField]
-    private Transform _lid;
-
-    [SerializeField]
-    private float _lidAnimationDuration = 1f;
-
-    [SerializeField]
-    private float _lidAnimationJumpPower = 0.5f;
-
-    [SerializeField]
-    private Transform _openLidPosition;
+    private BlenderLidController _blenderLidController;
 
     [Header("Jug settings")]
     [SerializeField]
@@ -35,6 +25,9 @@ public class BlenderController : MonoBehaviour {
 
     [SerializeField]
     private GameObject _jugContent;
+
+    [SerializeField]
+    private float _resetJugContentAnimationDuration = 1;
 
     [SerializeField]
     private float _mixDuration = 3;
@@ -52,12 +45,6 @@ public class BlenderController : MonoBehaviour {
 
     #region Fields, properties, constants -------------------------------------------------
 
-    private Vector3 _lidStartPosition;
-    private Tween _lidOpeningTween;
-    private Tween _lidClosingTween;
-    private bool _lidIsOpened = false;
-    private bool _lidIsClosed = true;
-    private Task _emptyTask = Task.FromResult<object>(null);
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
     private Material _jugContentMaterial;
@@ -73,7 +60,6 @@ public class BlenderController : MonoBehaviour {
     #region MonoBehaviour Hooks -------------------------------------------------
 
     private void Start() {
-        _lidStartPosition = _lid.position;
         _jugStartPosition = _jug.position;
         _jugStartRotation = _jug.rotation.eulerAngles;
         _jugRigidbody = _jug.GetComponent<Rigidbody>();
@@ -83,13 +69,8 @@ public class BlenderController : MonoBehaviour {
         ResetJugContentFillLevel();
     }
 
-    private void Update() {
-        HandleLidInteractions();
-    }
-
     private void OnValidate() {
-        Debug.Assert(_lid != null, $"Specify lid object to {GetType().Name} component!", this);
-        Debug.Assert(_openLidPosition != null, $"Specify animation end point object to {GetType().Name} component!", this);
+        Debug.Assert(_blenderLidController != null, $"Specify {nameof(BlenderLidController)} component to {GetType().Name} component!", this);
         Debug.Assert(_jugEntryPoint != null, $"Specify jug entry point object to {GetType().Name} component!", this);
         Debug.Assert(_jugHiddenResetPoint != null, $"Specify jug hidden reset point object to {GetType().Name} component!", this);
         Debug.Assert(_jug != null, $"Specify jug object to {GetType().Name} component!", this);
@@ -110,65 +91,14 @@ public class BlenderController : MonoBehaviour {
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
 
-    #region Interactions handling -------------------------------------------------
-
-    private void HandleLidInteractions() {
-        if (Input.GetKeyDown(KeyCode.LeftBracket)) {
-            OpenLidAsync();
-        }
-        else if (Input.GetKeyDown(KeyCode.RightBracket)) {
-            CloseLidAsync();
-        }
-    }
-
-    #endregion Interactions handling -------------------------------------------------
-
     #region Main functionality -------------------------------------------------
 
     public Task OpenLidAsync() {
-        if (_lidIsOpened) {
-            return _emptyTask;
-        }
-
-        _lidIsClosed = false;
-        if (_lidClosingTween != null) {
-            _lidClosingTween.Kill();
-            _lidClosingTween = null;
-        }
-
-        if (_lidOpeningTween == null) {
-            _lidOpeningTween = _lid
-                .DOJump(_openLidPosition.position, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-                .OnComplete(() => {
-                    _lidOpeningTween = null;
-                    _lidIsOpened = true;
-                });
-        }
-
-        return _lidOpeningTween.AsyncWaitForCompletion();
+        return _blenderLidController.OpenAsync();
     }
 
     public Task CloseLidAsync() {
-        if (_lidIsClosed) {
-            return _emptyTask;
-        }
-
-        _lidIsOpened = false;
-        if (_lidOpeningTween != null) {
-            _lidOpeningTween.Kill();
-            _lidOpeningTween = null;
-        }
-
-        if (_lidClosingTween == null) {
-            _lidClosingTween = _lid
-                .DOJump(_lidStartPosition, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-                .OnComplete(() => {
-                    _lidClosingTween = null;
-                    _lidIsClosed = true;
-                });
-        }
-
-        return _lidClosingTween.AsyncWaitForCompletion();
+        return _blenderLidController.CloseAsync();
     }
 
     public async Task<Color> MixAsync() {
@@ -178,8 +108,9 @@ public class BlenderController : MonoBehaviour {
 
         await CloseLidAsync();
 
-        var originalLidParent = _lid.parent;
-        _lid.SetParent(_jug);
+        Transform lid = _blenderLidController.transform;
+        Transform originalLidParent = lid.parent;
+        lid.SetParent(_jug);
 
         Color[] colorSteps = GenerateMixColorSteps(_ingredients);
 
@@ -189,7 +120,7 @@ public class BlenderController : MonoBehaviour {
 
         await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredientsAsync(_ingredients, _mixDuration));
 
-        _lid.SetParent(originalLidParent);
+        lid.SetParent(originalLidParent);
 
         Color finalColor = colorSteps[colorSteps.Length - 1];
 
@@ -198,7 +129,7 @@ public class BlenderController : MonoBehaviour {
 
     public async Task ResetJugContentAsync(float animationDuration = -1) {
         if (animationDuration < 0) {
-            animationDuration = _lidAnimationDuration;
+            animationDuration = _resetJugContentAnimationDuration;
         }
 
         await _jug
