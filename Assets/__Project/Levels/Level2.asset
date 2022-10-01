@@ -11,9 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfc938b21a4276f488d1a00d999dfd68, type: 3}
   m_Name: Level2
-  m_EditorClassIdentifier: 
-  targetColor: {r: 0.72156864, g: 1, b: 0.34509805, a: 1}
-  ingredients:
-  - {fileID: 11400000, guid: 064f97c1ecb54974b8c077f09b4f8c57, type: 2}
-  - {fileID: 11400000, guid: 1300a82c7ff6f7c48956916093ab337c, type: 2}
-  - {fileID: 11400000, guid: 367dcab49eae6ff46b3ab685b023493b, type: 2}
+  m_EditorClassIdentifier:
+  countedIngredients:
+  - ingredient: {fileID: 11400000, guid: 064f97c1ecb54974b8c077f09b4f8c57, type: 2}
+    count: 0
+  - ingredient: {fileID: 11400000, guid: 1300a82c7ff6f7c48956916093ab337c, type: 2}
+    count: 1
+  - ingredient: {fileID: 11400000, guid: 367dcab49eae6ff46b3ab685b023493b, type: 2}
+    count: 2

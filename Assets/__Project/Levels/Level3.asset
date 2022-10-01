@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc938b21a4276f488d1a00d999dfd68, type: 3}
   m_Name: Level3
   m_EditorClassIdentifier: 
-  targetColor: {r: 0.9990419, g: 0.34509802, b: 1, a: 1}
-  ingredients:
-  - {fileID: 11400000, guid: 6422fddb9ac5a2f4d84156ec4d02955f, type: 2}
-  - {fileID: 11400000, guid: a3822bc6c2396d14cae64760915a057a, type: 2}
-  - {fileID: 11400000, guid: 7fa8d8f83b5a7a34f9dae1d3a7a911de, type: 2}
+  countedIngredients:
+  - ingredient: {fileID: 11400000, guid: 6422fddb9ac5a2f4d84156ec4d02955f, type: 2}
+    count: 1
+  - ingredient: {fileID: 11400000, guid: a3822bc6c2396d14cae64760915a057a, type: 2}
+    count: 0
+  - ingredient: {fileID: 11400000, guid: 7fa8d8f83b5a7a34f9dae1d3a7a911de, type: 2}
+    count: 1

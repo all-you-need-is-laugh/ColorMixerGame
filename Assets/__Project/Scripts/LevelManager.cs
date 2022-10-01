@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Responds for levels lifecycle
@@ -65,13 +67,35 @@ public class LevelManager : MonoBehaviour {
 
     #region Main functionality -------------------------------------------------
 
+    private Color MixColors(IEnumerable<CountedIngredient> countedIngredients) {
+        Color totalColor = Color.clear;
+        int weights = 0;
+
+        foreach (var cIngredient in countedIngredients) {
+            totalColor += cIngredient.count * cIngredient.ingredient.color;
+            weights += cIngredient.count;
+        }
+
+        if (weights == 0) {
+            return Color.white;
+        }
+
+        totalColor /= weights;
+        totalColor.a = 1;
+
+        return totalColor;
+    }
+
     private void StartLevel(LevelSettings level) {
         if (level == null) {
             throw new Exception($"Unexpected attempt to start absent level ({_currentLevelIndex})");
         }
 
+        Color targetColor = MixColors(level.countedIngredients);
+        IngredientManager[] ingredients = level.countedIngredients.Select(ingredientCounted => ingredientCounted.ingredient).ToArray();
+
         // Just ignore method's async nature
-        _ = _gameManager.StartLevelAsync(level.targetColor, level.ingredients);
+        _ = _gameManager.StartLevelAsync(targetColor, ingredients);
     }
 
     public void RestartLevel() {
