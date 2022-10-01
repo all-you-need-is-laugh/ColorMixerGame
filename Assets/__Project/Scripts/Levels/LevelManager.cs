@@ -45,13 +45,19 @@ public class LevelManager : MonoBehaviour {
         Invoke(nameof(RestartLevel), .5f);
     }
 
+#if (UNITY_EDITOR)
+
     private void Update() {
         HandleDebugActions();
     }
 
+#endif
+
     #endregion MonoBehaviour Hooks -------------------------------------------------
 
-    #region Interactions handling -------------------------------------------------
+    #region Debug interactions handling -------------------------------------------------
+
+#if (UNITY_EDITOR)
 
     private void HandleDebugActions() {
         if (Input.GetKeyDown(KeyCode.R)) {
@@ -62,7 +68,9 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    #endregion Interactions handling -------------------------------------------------
+#endif
+
+    #endregion Debug interactions handling -------------------------------------------------
 
     #region Main functionality -------------------------------------------------
 

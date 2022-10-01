@@ -36,9 +36,13 @@ public class BlenderLidController : MonoBehaviour {
         _startPosition = transform.position;
     }
 
+#if (UNITY_EDITOR)
+
     private void Update() {
         HandleInteractions();
     }
+
+#endif
 
     private void OnValidate() {
         Debug.Assert(_openPosition != null, $"Specify animation end point object to {GetType().Name} component!", this);
@@ -46,7 +50,9 @@ public class BlenderLidController : MonoBehaviour {
 
     #endregion MonoBehaviour Hooks -------------------------------------------------
 
-    #region Interactions handling -------------------------------------------------
+    #region Debug interactions handling -------------------------------------------------
+
+#if (UNITY_EDITOR)
 
     private void HandleInteractions() {
         if (Input.GetKeyDown(KeyCode.LeftBracket)) {
@@ -57,7 +63,9 @@ public class BlenderLidController : MonoBehaviour {
         }
     }
 
-    #endregion Interactions handling -------------------------------------------------
+#endif
+
+    #endregion Debug interactions handling -------------------------------------------------
 
     #region Main functionality -------------------------------------------------
 
