@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: baac217d8cf43954796ea1f61a02adc2, type: 3}
-  m_Name: Apple_IngredientManager
+  m_Name: Orange_IngredientManager
   m_EditorClassIdentifier: 
-  ingredientColor: {r: 0.6688568, g: 1, b: 0.2584905, a: 1}
-  ingredientPrefab: {fileID: 778466012515400813, guid: c0214bc9842b55e4094189c554e10f33,
+  ingredientColor: {r: 1, g: 0.75239336, b: 0, a: 1}
+  ingredientPrefab: {fileID: 4803737274861913908, guid: c0a46faecf8cd1b4fb9e183cb7b4ab62,
     type: 3}
   renewDelay: 1
   minPoolSize: 3

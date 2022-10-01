@@ -15,6 +15,9 @@ public class IngredientController : MonoBehaviour {
     [SerializeField]
     private float _animationDuration = 1;
 
+    [SerializeField]
+    private Vector3 _animationRotation = Vector3.zero;
+
     #endregion Editable settings -------------------------------------------------
 
     #region Fields, properties, constants -------------------------------------------------
@@ -70,10 +73,10 @@ public class IngredientController : MonoBehaviour {
     public Task MoveToAsync(Vector3 destination) {
         UnfreezePhysics();
 
-        return _rigidbody
-            .DOJump(destination, _animationJumpPower, 1, _animationDuration)
+        return DOTween.Sequence()
+            .Join(_rigidbody.DOJump(destination, _animationJumpPower, 1, _animationDuration))
+            .Join(_rigidbody.DORotate(_animationRotation, _animationDuration).SetRelative(true))
             .AsyncWaitForCompletion();
-
     }
 
     public void ResetPhysics() {

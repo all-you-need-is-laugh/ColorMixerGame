@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: baac217d8cf43954796ea1f61a02adc2, type: 3}
-  m_Name: Apple_IngredientManager
+  m_Name: Tomato_IngredientManager
   m_EditorClassIdentifier: 
-  ingredientColor: {r: 0.6688568, g: 1, b: 0.2584905, a: 1}
-  ingredientPrefab: {fileID: 778466012515400813, guid: c0214bc9842b55e4094189c554e10f33,
+  ingredientColor: {r: 0.60784316, g: 0.27058825, b: 0.20000002, a: 1}
+  ingredientPrefab: {fileID: 8827885776679230755, guid: 33981a4e461db4c4fa0b96be499d01b1,
     type: 3}
   renewDelay: 1
   minPoolSize: 3
