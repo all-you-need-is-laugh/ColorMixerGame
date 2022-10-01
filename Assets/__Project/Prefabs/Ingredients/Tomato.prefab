@@ -62,8 +62,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.066014305
-  m_Center: {x: 0, y: 0.059638143, z: 0}
+  m_Radius: 0.033
+  m_Center: {x: 0, y: 0.03, z: 0}
 --- !u!114 &2797853277680211332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animationJumpPower: 0.5
   _animationDuration: 1
+  _animationRotation: {x: 0, y: 0, z: 0}
   interactable: 1
 --- !u!1001 &3255601947179508887
 PrefabInstance:
