@@ -3177,7 +3177,7 @@ MonoBehaviour:
   _ingredientsHolder: {fileID: 1193693646}
   _ingredientsPlacementWidth: 0.7
   _blenderController: {fileID: 4557574382609680217}
-  _waitBeforeCloseLid: 2
+  _waitBeforeCloseLid: 3
   _interactionsLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -3209,7 +3209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levels:
-  - {fileID: 11400000, guid: 275d86a6d06b908448c6eb03dcccef01, type: 2}
   - {fileID: 11400000, guid: 7bb9105b4626f2a4eb5280055edf17c4, type: 2}
   - {fileID: 11400000, guid: d0d04ccf7bbf05244b795d1e05d18e14, type: 2}
   - {fileID: 11400000, guid: 5564c76e6451faf4c84f712db7325188, type: 2}
