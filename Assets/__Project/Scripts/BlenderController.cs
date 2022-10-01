@@ -53,8 +53,10 @@ public class BlenderController : MonoBehaviour {
     #region Fields, properties, constants -------------------------------------------------
 
     private Vector3 _lidStartPosition;
-    private Task _lidOpeningTask;
-    private Task _lidClosingTask;
+    private Tween _lidOpeningTween;
+    private Tween _lidClosingTween;
+    private bool _lidIsOpened = false;
+    private bool _lidIsClosed = true;
     private Task _emptyTask = Task.FromResult<object>(null);
     private Vector3 _jugStartPosition;
     private Vector3 _jugStartRotation;
@@ -124,25 +126,49 @@ public class BlenderController : MonoBehaviour {
     #region Main functionality -------------------------------------------------
 
     public Task OpenLidAsync() {
-        if (_lidOpeningTask == null) {
-            _lidOpeningTask = _lid
-                .DOJump(_openLidPosition.position, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-                .OnComplete(() => _lidOpeningTask = null)
-                .AsyncWaitForCompletion();
+        if (_lidIsOpened) {
+            return _emptyTask;
         }
 
-        return _lidOpeningTask;
+        _lidIsClosed = false;
+        if (_lidClosingTween != null) {
+            _lidClosingTween.Kill();
+            _lidClosingTween = null;
+        }
+
+        if (_lidOpeningTween == null) {
+            _lidOpeningTween = _lid
+                .DOJump(_openLidPosition.position, _lidAnimationJumpPower, 1, _lidAnimationDuration)
+                .OnComplete(() => {
+                    _lidOpeningTween = null;
+                    _lidIsOpened = true;
+                });
+        }
+
+        return _lidOpeningTween.AsyncWaitForCompletion();
     }
 
     public Task CloseLidAsync() {
-        if (_lidClosingTask == null) {
-            _lidClosingTask = _lid
-                .DOJump(_lidStartPosition, _lidAnimationJumpPower, 1, _lidAnimationDuration)
-                .OnComplete(() => _lidClosingTask = null)
-                .AsyncWaitForCompletion();
+        if (_lidIsClosed) {
+            return _emptyTask;
         }
 
-        return _lidClosingTask;
+        _lidIsOpened = false;
+        if (_lidOpeningTween != null) {
+            _lidOpeningTween.Kill();
+            _lidOpeningTween = null;
+        }
+
+        if (_lidClosingTween == null) {
+            _lidClosingTween = _lid
+                .DOJump(_lidStartPosition, _lidAnimationJumpPower, 1, _lidAnimationDuration)
+                .OnComplete(() => {
+                    _lidClosingTween = null;
+                    _lidIsClosed = true;
+                });
+        }
+
+        return _lidClosingTween.AsyncWaitForCompletion();
     }
 
     public async Task<Color> MixAsync() {
