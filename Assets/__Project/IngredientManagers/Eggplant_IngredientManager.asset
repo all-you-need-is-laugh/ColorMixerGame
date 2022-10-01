@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baac217d8cf43954796ea1f61a02adc2, type: 3}
   m_Name: Eggplant_IngredientManager
   m_EditorClassIdentifier: 
-  ingredientColor: {r: 0.2627451, g: 0.25490198, b: 0.31764707, a: 1}
+  color: {r: 0.31228727, g: 0.253117, b: 0.618, a: 1}
   ingredientPrefab: {fileID: 778466012515400813, guid: 1d57c2709f93edf4b9b1a4858573b7be,
     type: 3}
   renewDelay: 1

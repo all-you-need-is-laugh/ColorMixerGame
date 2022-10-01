@@ -233,7 +233,7 @@ public class BlenderController : MonoBehaviour {
         Color mixColor = Color.black;
         int i = 0;
         foreach (var ingredient in ingredients) {
-            mixColor += ingredient.ingredientManager.ingredientColor;
+            mixColor += ingredient.ingredientManager.color;
             colorSteps[i] = mixColor / (i + 1);
             colorSteps[i].a = 1;
             i++;

@@ -8,7 +8,7 @@ using UnityEngine.Pool;
 public class IngredientManager : ScriptableObject {
     #region Editable settings -------------------------------------------------
 
-    public Color ingredientColor;
+    public Color color;
     public GameObject ingredientPrefab;
     public float renewDelay = 1;
     public int minPoolSize = 3;
