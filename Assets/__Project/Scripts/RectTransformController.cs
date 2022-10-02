@@ -67,6 +67,7 @@ public class RectTransformController : MonoBehaviour {
 
         return _rect
             .DOAnchorPos(_shownStatePosition, duration)
+            .SetEase(Ease.OutBack)
             .AsyncWaitForCompletion();
     }
 
