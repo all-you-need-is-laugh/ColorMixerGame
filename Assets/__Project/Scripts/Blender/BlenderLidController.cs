@@ -38,7 +38,7 @@ public class BlenderLidController : MonoBehaviour {
 #if (UNITY_EDITOR)
 
     private void Update() {
-        HandleInteractions();
+        HandleDebugInteractions();
     }
 
 #endif
@@ -53,7 +53,7 @@ public class BlenderLidController : MonoBehaviour {
 
 #if (UNITY_EDITOR)
 
-    private void HandleInteractions() {
+    private void HandleDebugInteractions() {
         if (Input.GetKeyDown(KeyCode.LeftBracket)) {
             OpenAsync();
         }

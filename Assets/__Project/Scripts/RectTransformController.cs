@@ -31,7 +31,32 @@ public class RectTransformController : MonoBehaviour {
         _hiddenStatePosition = _rect.anchoredPosition;
     }
 
+#if (UNITY_EDITOR)
+
+    private void Update() {
+        HandleDebugInteractions();
+    }
+
+#endif
+
     #endregion MonoBehaviour Hooks -------------------------------------------------
+
+    #region Debug interactions handling -------------------------------------------------
+
+#if (UNITY_EDITOR)
+
+    private void HandleDebugInteractions() {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            _ = ShowAsync();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            _ = HideAsync();
+        }
+    }
+
+#endif
+
+    #endregion Debug interactions handling -------------------------------------------------
 
     #region Main functionality -------------------------------------------------
 
