@@ -135,24 +135,25 @@ public class BlenderController : MonoBehaviour {
         return finalColor;
     }
 
-    public async Task ResetJugContentAsync(float animationDuration = -1) {
+    public Task ResetJugContentAsync(float animationDuration = -1) {
         if (animationDuration < 0) {
             animationDuration = _resetJugContentAnimationDuration;
         }
 
-        await _jug
+        _jugRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+
+        Tween moveForward = _jug
             .DOMove(_jugHiddenResetPoint.position, animationDuration / 2)
-            .OnComplete(() => {
-                ResetJugContentFillLevel();
-                ResetJugPhysics();
-            })
-            .AsyncWaitForCompletion();
+            .OnComplete(ResetJugContentFillLevel);
 
-        await _jug
+        Tween moveBackWards = _jug
             .DOJump(_jugStartPosition, 1, 1, animationDuration / 2)
-            .AsyncWaitForCompletion();
+            .OnComplete(() => _jugRigidbody.constraints = RigidbodyConstraints.None);
 
-        await ResetJugTransformAsync(0);
+        return DOTween.Sequence()
+            .Append(moveForward)
+            .Append(moveBackWards)
+            .AsyncWaitForCompletion();
     }
 
     public Task ResetJugTransformAsync(float animationDuration = 0.5f) {
