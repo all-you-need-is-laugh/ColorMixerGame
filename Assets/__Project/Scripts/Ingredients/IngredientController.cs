@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 // Responds for interactions with specific ingredient
@@ -10,10 +9,7 @@ public class IngredientController : MonoBehaviour {
     #region Editable settings -------------------------------------------------
 
     [SerializeField]
-    private float _animationJumpPower = 0.5f;
-
-    [SerializeField]
-    private float _animationDuration = 1;
+    private float _animationExtraHeight = 0.5f;
 
     [SerializeField]
     private Vector3 _animationRotation = Vector3.zero;
@@ -73,10 +69,11 @@ public class IngredientController : MonoBehaviour {
     public Task MoveToAsync(Vector3 destination) {
         UnfreezePhysics();
 
-        return DOTween.Sequence()
-            .Join(_rigidbody.DOJump(destination, _animationJumpPower, 1, _animationDuration))
-            .Join(_rigidbody.DORotate(_animationRotation, _animationDuration).SetRelative(true))
-            .AsyncWaitForCompletion();
+        float time;
+        _rigidbody.velocity = Utils.CalculateLaunchVelocity(transform.position, destination, _animationExtraHeight, out time);
+        _rigidbody.angularVelocity = Mathf.Deg2Rad / time * _animationRotation;
+
+        return Task.Delay(Mathf.FloorToInt(time * 1000));
     }
 
     public void ResetPhysics() {
