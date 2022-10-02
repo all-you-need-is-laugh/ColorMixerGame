@@ -397,19 +397,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'to ordered color
-
-'
+  m_text: to ordered color
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b59053dafb6770c4ebb52eaf4e973347, type: 2}
+  m_sharedMaterial: {fileID: 3488985929226224522, guid: b59053dafb6770c4ebb52eaf4e973347,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -853,7 +852,7 @@ PrefabInstance:
     - target: {fileID: 3821098847704663136, guid: d41a4c8de20b15746a50c296155420e0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -20
+      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 3821098847704663136, guid: d41a4c8de20b15746a50c296155420e0,
         type: 3}
@@ -1435,15 +1434,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: Your cocktail's color matches on
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b59053dafb6770c4ebb52eaf4e973347, type: 2}
+  m_sharedMaterial: {fileID: 3488985929226224522, guid: b59053dafb6770c4ebb52eaf4e973347,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2272,7 +2272,7 @@ PrefabInstance:
     - target: {fileID: 3821098847704663136, guid: d41a4c8de20b15746a50c296155420e0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -20
+      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 3821098847704663136, guid: d41a4c8de20b15746a50c296155420e0,
         type: 3}
@@ -2694,8 +2694,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -95, y: -250}
-  m_SizeDelta: {x: -350, y: 160}
+  m_AnchoredPosition: {x: 0, y: -250}
+  m_SizeDelta: {x: -160, y: 160}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1781427240
 MonoBehaviour:
@@ -2719,15 +2719,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: 77%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b59053dafb6770c4ebb52eaf4e973347, type: 2}
+  m_sharedMaterial: {fileID: 3488985929226224522, guid: b59053dafb6770c4ebb52eaf4e973347,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2744,8 +2745,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
