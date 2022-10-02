@@ -1372,8 +1372,8 @@ MonoBehaviour:
   _resultColorImageUI: {fileID: 529795839}
   _colorSimilarityTextUI: {fileID: 1781427240}
   _nextLevelButtonUI: {fileID: 625545000}
-  _successTextColor: {r: 0, g: 0.6, b: 0.012499953, a: 1}
-  _failureTextColor: {r: 0.6, g: 0, b: 0, a: 1}
+  _successTextColor: {r: 0.30719998, g: 0.96, b: 0.31959498, a: 1}
+  _failureTextColor: {r: 0.959, g: 0.304962, b: 0.304962, a: 1}
 --- !u!1 &728787786
 GameObject:
   m_ObjectHideFlags: 0
