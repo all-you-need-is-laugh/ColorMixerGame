@@ -13,6 +13,9 @@ public class BlenderController : MonoBehaviour {
     [SerializeField]
     private BlenderLidController _blenderLidController;
 
+    [SerializeField]
+    private BlenderMixButtonController _blenderMixButtonController;
+
     [Header("Jug settings")]
     [SerializeField]
     private Transform _jug;
@@ -71,6 +74,7 @@ public class BlenderController : MonoBehaviour {
 
     private void OnValidate() {
         Debug.Assert(_blenderLidController != null, $"Specify {nameof(BlenderLidController)} component to {GetType().Name} component!", this);
+        Debug.Assert(_blenderMixButtonController != null, $"Specify {nameof(BlenderMixButtonController)} component to {GetType().Name} component!", this);
         Debug.Assert(_jugEntryPoint != null, $"Specify jug entry point object to {GetType().Name} component!", this);
         Debug.Assert(_jugHiddenResetPoint != null, $"Specify jug hidden reset point object to {GetType().Name} component!", this);
         Debug.Assert(_jug != null, $"Specify jug object to {GetType().Name} component!", this);
@@ -106,6 +110,8 @@ public class BlenderController : MonoBehaviour {
             throw new Exception($"Forbidden to call '{nameof(MixAsync)}' method if there are no ingredients in blender!");
         }
 
+        _blenderMixButtonController.SwitchOn();
+
         await CloseLidAsync();
 
         Transform lid = _blenderLidController.transform;
@@ -119,6 +125,8 @@ public class BlenderController : MonoBehaviour {
             .Join(AnimateColorMixing(_jugContentMaterial, colorSteps, _mixDuration));
 
         await Task.WhenAll(animation.AsyncWaitForCompletion(), DisposeIngredientsAsync(_ingredients, _mixDuration));
+
+        _blenderMixButtonController.SwitchOff();
 
         lid.SetParent(originalLidParent);
 
